@@ -625,7 +625,7 @@ ui <- fluidPage(
           ),
           " and the German Research Foundation (DFG). ",
           "We thank Dr. Xenia Schmalz for her contributions to the first edition of the app. ",
-          "The current version represents an independent, expanded development."
+          "The current version represents an independent, expanded development. We thank Dr. Flavio Azevedo (Director of FORRT) and Dr. Lukas Wallrich (Co-Chair of FORRT) for their technical feedback and for supporting the integration of the project within FORRT."
         )
       )
     )
