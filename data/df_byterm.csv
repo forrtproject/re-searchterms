@@ -1,0 +1,258 @@
+term,total_definitions,tokens,types,type_to_token_ratio,avg_similarity,cluster,cluster_name
+AMNESIA,3,32,26,0.8125,0.15038952424540167,1,"Equity, Diversity, and Inclusion"
+ARRIVE Guidelines,3,59,47,0.7966101694915254,0.029141799108661867,1,"Equity, Diversity, and Inclusion"
+Abstract Bias,1,46,31,0.6739130434782609,NA,3,Scholarly Communication and Publishing
+Academic Impact,3,71,49,0.6901408450704225,0.40728819130728755,3,Scholarly Communication and Publishing
+Accessibility,18,302,226,0.7483443708609272,0.3027528755409002,1,"Equity, Diversity, and Inclusion"
+Ad hominem bias,5,70,52,0.7428571428571429,0.30179520943030186,1,"Equity, Diversity, and Inclusion"
+Adversarial (collaborative) commentary,3,53,49,0.9245283018867925,0.39068004004529655,5,Learning and Research Design
+Adversarial collaboration,3,60,51,0.85,0.42406849331950414,2,Knowledge and Conceptual Foundations
+Affiliation bias,1,26,23,0.8846153846153846,NA,3,Scholarly Communication and Publishing
+Aleatoric uncertainty,1,24,23,0.9583333333333334,NA,4,Statistical Inference and Methods
+Altmetrics,6,107,68,0.6355140186915887,0.540302989901866,3,Scholarly Communication and Publishing
+Analytic Flexibility,1,53,44,0.8301886792452831,NA,3,Scholarly Communication and Publishing
+Anonymity,28,377,226,0.5994694960212201,0.3585695739493174,1,"Equity, Diversity, and Inclusion"
+Article Processing Charge (APC),2,93,79,0.8494623655913979,0.6425766666178656,3,Scholarly Communication and Publishing
+Authorship,4,75,62,0.8266666666666667,0.316457472585592,3,Scholarly Communication and Publishing
+Auxiliary Hypothesis,1,34,29,0.8529411764705882,NA,2,Knowledge and Conceptual Foundations
+BIDS data structure,11,100,83,0.83,0.1455380203880604,1,"Equity, Diversity, and Inclusion"
+BIZARRE,3,53,47,0.8867924528301887,0.15262359979916082,1,"Equity, Diversity, and Inclusion"
+Badges (Open Science),3,78,62,0.7948717948717948,0.0842080755461355,1,"Equity, Diversity, and Inclusion"
+Bayes Factor,2,73,52,0.7123287671232876,0.29368635416480676,4,Statistical Inference and Methods
+Bayesian Inference,10,167,103,0.6167664670658682,0.46113853922560905,4,Statistical Inference and Methods
+Bayesian Parameter Estimation,1,80,61,0.7625,NA,4,Statistical Inference and Methods
+Bottom-up approach (to Open Scholarship),2,80,74,0.925,0.40498794343586675,5,Learning and Research Design
+Bracketing Interviews,2,53,44,0.8301886792452831,0.23587632232499442,3,Scholarly Communication and Publishing
+Bropenscience,1,64,59,0.921875,NA,3,Scholarly Communication and Publishing
+CARKing,3,32,26,0.8125,0.4664595637341055,3,Scholarly Communication and Publishing
+CKAN,1,29,25,0.8620689655172413,NA,6,Open Science and Digital Infrastructure
+COAR Community Framework for Good Practices in Repositories,1,26,24,0.9230769230769231,NA,3,Scholarly Communication and Publishing
+CRediT,11,134,106,0.7910447761194029,0.17825778712179483,1,"Equity, Diversity, and Inclusion"
+Center for Open Science (COS),10,48,44,0.9166666666666666,0.13772079019906672,1,"Equity, Diversity, and Inclusion"
+Citation Diversity Statement,2,59,53,0.8983050847457628,-0.03631915973906237,3,Scholarly Communication and Publishing
+Citation bias,11,149,124,0.8322147651006712,0.10946572031001595,1,"Equity, Diversity, and Inclusion"
+Citizen Science,10,232,145,0.625,0.5701468172231904,5,Learning and Research Design
+Co-production,8,166,129,0.7771084337349398,0.3434350524392414,5,Learning and Research Design
+Code review,7,163,123,0.754601226993865,0.4863605424756377,6,Open Science and Digital Infrastructure
+Codebook,6,96,81,0.84375,0.3111492961747435,6,Open Science and Digital Infrastructure
+Collaborative Replication and Education Project (CREP),1,47,37,0.7872340425531915,NA,5,Learning and Research Design
+Committee on Best Practices in Data Analysis and Sharing (COBIDAS),1,44,36,0.8181818181818182,NA,3,Scholarly Communication and Publishing
+Communality,7,69,60,0.8695652173913043,0.2789727983741371,1,"Equity, Diversity, and Inclusion"
+Community Projects,3,77,62,0.8051948051948052,0.4729417313281679,5,Learning and Research Design
+Compendium,7,98,84,0.8571428571428571,0.1756002413513304,6,Open Science and Digital Infrastructure
+Computational reproducibility,3,75,59,0.7866666666666666,0.1443750141029856,6,Open Science and Digital Infrastructure
+Conceptual replication,3,86,72,0.8372093023255814,0.3588060925972977,2,Knowledge and Conceptual Foundations
+Confirmation bias,13,177,77,0.4350282485875706,0.5885406063815088,2,Knowledge and Conceptual Foundations
+Confirmatory analyses,2,55,46,0.8363636363636363,-0.020161828474826417,2,Knowledge and Conceptual Foundations
+Conflict of interest,7,196,142,0.7244897959183674,0.42119478220998857,1,"Equity, Diversity, and Inclusion"
+Consortium authorship,1,53,43,0.8113207547169812,NA,3,Scholarly Communication and Publishing
+Constraints on Generality (COG),2,50,44,0.88,0.042594719668296005,2,Knowledge and Conceptual Foundations
+Construct validity,12,220,155,0.7045454545454546,0.3218425790029378,2,Knowledge and Conceptual Foundations
+Content validity,17,202,132,0.6534653465346535,0.3051691619219916,2,Knowledge and Conceptual Foundations
+Contribution,5,36,33,0.9166666666666666,0.19712910640487938,1,"Equity, Diversity, and Inclusion"
+Corrigendum,3,60,46,0.7666666666666667,0.5031194904683751,3,Scholarly Communication and Publishing
+Creative Commons (CC) license,6,193,115,0.5958549222797928,0.4926763981854024,6,Open Science and Digital Infrastructure
+Creative destruction approach to replication,1,35,31,0.8857142857142857,NA,5,Learning and Research Design
+Credibility revolution,2,42,37,0.8809523809523809,0.1513890704869195,2,Knowledge and Conceptual Foundations
+Criterion validity,5,83,62,0.7469879518072289,0.19609506226080717,2,Knowledge and Conceptual Foundations
+Crowdsourced Research,2,146,112,0.7671232876712328,0.19553621295323095,5,Learning and Research Design
+Cultural taxation,4,127,106,0.8346456692913385,0.33035218621666157,1,"Equity, Diversity, and Inclusion"
+Cumulative science,2,57,48,0.8421052631578947,0.046021363395244014,2,Knowledge and Conceptual Foundations
+DOI (digital object identifier),2,62,57,0.9193548387096774,0.369649742492739,6,Open Science and Digital Infrastructure
+DORA,2,56,43,0.7678571428571429,0.6164910330673006,5,Learning and Research Design
+Data Access and Research Transparency (DA-RT),1,84,65,0.7738095238095238,NA,5,Learning and Research Design
+Data management plan (DMP),3,53,35,0.660377358490566,0.6986990911238337,6,Open Science and Digital Infrastructure
+Data sharing,7,129,94,0.7286821705426356,0.35433264663509,6,Open Science and Digital Infrastructure
+Data visualisation,40,752,334,0.4441489361702128,0.526361484583223,6,Open Science and Digital Infrastructure
+Decolonisation,3,149,125,0.8389261744966443,0.5639681699922005,5,Learning and Research Design
+Demarcation criterion,3,47,42,0.8936170212765957,0.21799002466334264,2,Knowledge and Conceptual Foundations
+Direct replication,2,160,116,0.725,-0.021721448055258396,2,Knowledge and Conceptual Foundations
+Diversity,144,2220,656,0.2954954954954955,0.34402213363735107,1,"Equity, Diversity, and Inclusion"
+Double consciousness,3,104,78,0.75,0.46855540448394883,1,"Equity, Diversity, and Inclusion"
+Double-blind peer review,1,57,52,0.9122807017543859,NA,3,Scholarly Communication and Publishing
+Early career researchers (ECRs),1,52,48,0.9230769230769231,NA,3,Scholarly Communication and Publishing
+Economic and societal impact,3,35,33,0.9428571428571428,0.2500377580735883,1,"Equity, Diversity, and Inclusion"
+Embargo Period,2,88,69,0.7840909090909091,0.6202311799667984,3,Scholarly Communication and Publishing
+Epistemic uncertainty,4,71,56,0.7887323943661971,0.49073806803419656,2,Knowledge and Conceptual Foundations
+Epistemology,66,735,292,0.39727891156462586,0.4618829497111473,2,Knowledge and Conceptual Foundations
+Equity,151,2296,829,0.36106271777003485,0.33964748114988236,1,"Equity, Diversity, and Inclusion"
+Equivalence Testing,2,74,60,0.8108108108108109,0.3750922148500436,4,Statistical Inference and Methods
+Error detection,4,144,113,0.7847222222222222,0.2284440657697934,2,Knowledge and Conceptual Foundations
+Evidence Synthesis,3,115,82,0.7130434782608696,0.1979244646233776,2,Knowledge and Conceptual Foundations
+Exploratory data analysis,10,220,130,0.5909090909090909,0.5036748406205981,6,Open Science and Digital Infrastructure
+External Validity,8,122,92,0.7540983606557377,0.21298516732330855,2,Knowledge and Conceptual Foundations
+FAIR principles,2,33,25,0.7575757575757576,0.4834132654511548,6,Open Science and Digital Infrastructure
+FORRT,2,63,52,0.8253968253968254,0.12815662087770013,5,Learning and Research Design
+Face validity,7,97,63,0.6494845360824743,0.42821832266647225,2,Knowledge and Conceptual Foundations
+Feminist psychology,2,52,44,0.8461538461538461,0.07415144248009944,1,"Equity, Diversity, and Inclusion"
+First-last-author-emphasis norm (FLAE),1,34,21,0.6176470588235294,NA,3,Scholarly Communication and Publishing
+Free Our Knowledge Platform,11,88,75,0.8522727272727273,0.24031718001223148,1,"Equity, Diversity, and Inclusion"
+GPower,1,32,29,0.90625,NA,3,Scholarly Communication and Publishing
+Gaming (the system),2,77,63,0.8181818181818182,0.17675260019216466,3,Scholarly Communication and Publishing
+Garden of forking paths,11,177,139,0.7853107344632768,0.07982268593090917,1,"Equity, Diversity, and Inclusion"
+General Data Protection Regulation (GDPR),15,401,149,0.371571072319202,0.6581929157922929,6,Open Science and Digital Infrastructure
+Generalizability,4,42,35,0.8333333333333334,0.3569060993594153,2,Knowledge and Conceptual Foundations
+Gift (or Guest) Authorship,1,54,43,0.7962962962962963,NA,3,Scholarly Communication and Publishing
+Git,5,76,65,0.8552631578947368,0.06910637871382451,1,"Equity, Diversity, and Inclusion"
+Goodhart’s Law,2,68,60,0.8823529411764706,0.5674975863241422,3,Scholarly Communication and Publishing
+H-index,6,134,66,0.4925373134328358,0.6304665388756643,3,Scholarly Communication and Publishing
+HARKing,2,47,38,0.8085106382978723,0.14786738974944616,2,Knowledge and Conceptual Foundations
+Hackathon,6,128,93,0.7265625,0.49342808041670777,5,Learning and Research Design
+Hidden Moderators,11,83,76,0.9156626506024096,0.17490584146359242,1,"Equity, Diversity, and Inclusion"
+Hypothesis,12,165,112,0.6787878787878788,0.39028103057910407,2,Knowledge and Conceptual Foundations
+Ideological bias,2,62,56,0.9032258064516129,0.12966175664456558,2,Knowledge and Conceptual Foundations
+Incentive structure,4,92,83,0.9021739130434783,0.4950816033674287,2,Knowledge and Conceptual Foundations
+Inclusion,127,1746,653,0.37399770904925544,0.29008593533391797,1,"Equity, Diversity, and Inclusion"
+Induction,21,216,153,0.7083333333333334,0.21045037529139132,1,"Equity, Diversity, and Inclusion"
+Interaction Fallacy,5,69,54,0.782608695652174,0.1905595778056322,1,"Equity, Diversity, and Inclusion"
+Interlocking,3,68,63,0.9264705882352942,0.26226447150002197,1,"Equity, Diversity, and Inclusion"
+Internal Validity,6,88,71,0.8068181818181818,0.1766545247335436,2,Knowledge and Conceptual Foundations
+Intersectionality,121,2428,706,0.2907742998352554,0.4734232477085201,1,"Equity, Diversity, and Inclusion"
+JASP,2,64,45,0.703125,0.7109363807921588,6,Open Science and Digital Infrastructure
+JISC Open Policy Finder (formerly Sherpa services),1,20,17,0.85,NA,3,Scholarly Communication and Publishing
+JSON file,4,99,67,0.6767676767676768,0.531592920378997,6,Open Science and Digital Infrastructure
+JabRef,2,29,26,0.896551724137931,-0.06136356217216296,6,Open Science and Digital Infrastructure
+Jamovi,1,28,23,0.8214285714285714,NA,6,Open Science and Digital Infrastructure
+Journal Impact Factor™,4,98,47,0.47959183673469385,0.72491133723186,3,Scholarly Communication and Publishing
+Knowledge acquisition,3,43,35,0.813953488372093,0.3129014506432915,2,Knowledge and Conceptual Foundations
+Likelihood Principle,3,50,41,0.82,0.1460775449438443,2,Knowledge and Conceptual Foundations
+Likelihood function,3,87,50,0.5747126436781609,0.29091126022503444,4,Statistical Inference and Methods
+Literature Review,3,108,86,0.7962962962962963,0.4327263879702314,5,Learning and Research Design
+Manel,2,37,34,0.918918918918919,0.5380970338385902,3,Scholarly Communication and Publishing
+Many Labs,2,57,50,0.8771929824561403,0.17282254491287943,2,Knowledge and Conceptual Foundations
+Many authors,2,59,53,0.8983050847457628,0.25836651687008233,5,Learning and Research Design
+Massive Open Online Courses (MOOCs),15,303,192,0.6336633663366337,0.5773115140939061,5,Learning and Research Design
+Massively Open Online Papers (MOOPs),1,14,14,1,NA,3,Scholarly Communication and Publishing
+Matthew effect (in science),2,66,49,0.7424242424242424,0.6620577552297835,3,Scholarly Communication and Publishing
+Meta-analysis,33,464,224,0.4827586206896552,0.45704790484652247,2,Knowledge and Conceptual Foundations
+Meta-science or Meta-research,3,48,37,0.7708333333333334,0.5213567937526841,5,Learning and Research Design
+Metadata,75,1157,500,0.43215211754537597,0.4698732723908739,6,Open Science and Digital Infrastructure
+Model (philosophy),1,33,31,0.9393939393939394,NA,3,Scholarly Communication and Publishing
+Multi-Analyst Studies,1,51,44,0.8627450980392157,NA,3,Scholarly Communication and Publishing
+Multiplicity,8,101,77,0.7623762376237624,0.15476445618170198,1,"Equity, Diversity, and Inclusion"
+Multiverse analysis,4,102,65,0.6372549019607843,0.17359589427376734,2,Knowledge and Conceptual Foundations
+Name Ambiguity Problem,11,90,77,0.8555555555555555,0.14866444098266154,1,"Equity, Diversity, and Inclusion"
+Named entity-based Text Anonymization for Open Science (NETANOS),1,33,33,1,NA,3,Scholarly Communication and Publishing
+"Non-Intervention, Reproducible, and Open Systematic Reviews (NIRO-SR)",1,40,31,0.775,NA,3,Scholarly Communication and Publishing
+Null Hypothesis Significance Testing (NHST),1,41,38,0.926829268292683,NA,4,Statistical Inference and Methods
+ORCID (Open Researcher and Contributor ID),1,39,30,0.7692307692307693,NA,3,Scholarly Communication and Publishing
+Objectivity,8,140,116,0.8285714285714286,0.22389117222264238,1,"Equity, Diversity, and Inclusion"
+Ontology (Artificial Intelligence),137,2863,705,0.24624519734544184,0.4040433308587744,2,Knowledge and Conceptual Foundations
+Open Code,4,68,51,0.75,0.40033538759321907,6,Open Science and Digital Infrastructure
+Open Data,21,313,173,0.5527156549520766,0.4225380509734939,6,Open Science and Digital Infrastructure
+Open Educational Resources (OER) Commons,1,32,25,0.78125,NA,5,Learning and Research Design
+Open Licenses,11,117,95,0.811965811965812,0.11447796787578725,1,"Equity, Diversity, and Inclusion"
+Open Material,2,59,52,0.8813559322033898,0.480296152070471,6,Open Science and Digital Infrastructure
+Open Peer Review,12,108,88,0.8148148148148148,0.1980466916603278,1,"Equity, Diversity, and Inclusion"
+Open Scholarship,5,112,87,0.7767857142857143,0.3833691926247474,5,Learning and Research Design
+Open Scholarship Knowledge Base,1,26,19,0.7307692307692307,NA,5,Learning and Research Design
+Open Science,8,207,138,0.6666666666666666,0.4385052320507521,5,Learning and Research Design
+Open Science Framework,2,39,36,0.9230769230769231,0.17875489445819398,5,Learning and Research Design
+Open Source software,52,1234,392,0.31766612641815234,0.4921602379753609,6,Open Science and Digital Infrastructure
+Open access,52,903,318,0.3521594684385382,0.461655475024371,6,Open Science and Digital Infrastructure
+Open washing,1,54,44,0.8148148148148148,NA,5,Learning and Research Design
+OpenNeuro,2,29,27,0.9310344827586207,0.2335720892941262,6,Open Science and Digital Infrastructure
+Optional Stopping,1,62,48,0.7741935483870968,NA,3,Scholarly Communication and Publishing
+Overlay Journal,2,43,40,0.9302325581395349,-0.013539116993456257,3,Scholarly Communication and Publishing
+P-curve,11,162,116,0.7160493827160493,0.15249844827510817,1,"Equity, Diversity, and Inclusion"
+PARKing,3,38,33,0.868421052631579,0.30979670227306705,1,"Equity, Diversity, and Inclusion"
+PCI (Peer Community In),1,40,33,0.825,NA,3,Scholarly Communication and Publishing
+PCI Registered Reports,1,73,62,0.8493150684931506,NA,3,Scholarly Communication and Publishing
+PREPARE Guidelines,11,83,75,0.9036144578313253,0.1531702246249063,1,"Equity, Diversity, and Inclusion"
+PRO (peer review openness) initiative,1,41,34,0.8292682926829268,NA,3,Scholarly Communication and Publishing
+Papermill,1,62,55,0.8870967741935484,NA,3,Scholarly Communication and Publishing
+Paradata,4,261,123,0.47126436781609193,0.5773267582199015,6,Open Science and Digital Infrastructure
+Participatory Research,4,86,71,0.8255813953488372,0.5480023219702533,5,Learning and Research Design
+Patient and Public Involvement (PPI),1,54,49,0.9074074074074074,NA,5,Learning and Research Design
+Paywall,5,42,31,0.7380952380952381,0.5708677845635438,3,Scholarly Communication and Publishing
+Plan S,10,138,104,0.7536231884057971,0.19787274540817656,1,"Equity, Diversity, and Inclusion"
+Positionality,25,392,200,0.5102040816326531,0.406445678851373,1,"Equity, Diversity, and Inclusion"
+Positionality Map,1,64,51,0.796875,NA,5,Learning and Research Design
+Post Hoc,2,47,37,0.7872340425531915,0.19532409054858543,2,Knowledge and Conceptual Foundations
+Post Publication Peer Review,3,38,33,0.868421052631579,0.2613563458605299,3,Scholarly Communication and Publishing
+Posterior distribution,4,54,41,0.7592592592592593,0.3844944767300931,4,Statistical Inference and Methods
+Predatory Publishing,3,108,81,0.75,0.5852266261244901,3,Scholarly Communication and Publishing
+Preprint,5,88,67,0.7613636363636364,0.37309433216975235,3,Scholarly Communication and Publishing
+Preregistration,5,102,82,0.803921568627451,0.37699215790055995,2,Knowledge and Conceptual Foundations
+Preregistration Pledge,1,31,30,0.967741935483871,NA,5,Learning and Research Design
+Prior distribution,4,70,59,0.8428571428571429,0.46610815447995796,4,Statistical Inference and Methods
+Pseudonymisation,1,68,58,0.8529411764705882,NA,3,Scholarly Communication and Publishing
+Pseudoreplication,2,72,59,0.8194444444444444,0.37560991761634854,2,Knowledge and Conceptual Foundations
+Psychometric meta-analysis,1,41,33,0.8048780487804879,NA,3,Scholarly Communication and Publishing
+PubPeer,4,21,19,0.9047619047619048,0.14335310904966603,1,"Equity, Diversity, and Inclusion"
+Public Trust in Science,9,211,166,0.7867298578199052,0.24581772177462985,1,"Equity, Diversity, and Inclusion"
+Publication bias (File Drawer Problem),4,105,83,0.7904761904761904,0.4944965164133482,2,Knowledge and Conceptual Foundations
+Publish or Perish,8,102,80,0.7843137254901961,0.19026521027462082,1,"Equity, Diversity, and Inclusion"
+Python,20,356,183,0.5140449438202247,0.4605553102759346,6,Open Science and Digital Infrastructure
+Qualitative research,69,1352,479,0.35428994082840237,0.45257959290977307,2,Knowledge and Conceptual Foundations
+Quantitative research,21,359,212,0.5905292479108635,0.4139547794256875,2,Knowledge and Conceptual Foundations
+Questionable Measurement Practices (QMP),1,33,31,0.9393939393939394,NA,3,Scholarly Communication and Publishing
+Questionable Research Practices or Questionable Reporting Practices (QRPs),1,26,25,0.9615384615384616,NA,3,Scholarly Communication and Publishing
+R,1,51,44,0.8627450980392157,NA,6,Open Science and Digital Infrastructure
+RIOT Science Club,4,49,45,0.9183673469387755,0.12249311703584803,1,"Equity, Diversity, and Inclusion"
+Red Teams,3,73,58,0.7945205479452054,0.4790676061291714,5,Learning and Research Design
+Reflexivity,49,925,448,0.4843243243243243,0.37175152066284384,2,Knowledge and Conceptual Foundations
+Registered Report,4,101,72,0.7128712871287128,0.3554669996837489,5,Learning and Research Design
+Registry of Research Data Repositories,11,100,87,0.87,0.19403366438627054,1,"Equity, Diversity, and Inclusion"
+Reliability,76,801,354,0.4419475655430712,0.26157735422158856,2,Knowledge and Conceptual Foundations
+Repeatability,6,94,64,0.6808510638297872,0.35579153125613217,2,Knowledge and Conceptual Foundations
+RepliCATs project,1,29,26,0.896551724137931,NA,5,Learning and Research Design
+Replicability,3,76,65,0.8552631578947368,0.3832311686906925,2,Knowledge and Conceptual Foundations
+Replication Markets,11,95,82,0.8631578947368421,0.1864196209441837,1,"Equity, Diversity, and Inclusion"
+Reporting Guideline,1,43,40,0.9302325581395349,NA,3,Scholarly Communication and Publishing
+Repository,18,236,158,0.6694915254237288,0.3362806676153884,6,Open Science and Digital Infrastructure
+ReproducibiliTea,1,35,33,0.9428571428571428,NA,5,Learning and Research Design
+Reproducibility,8,153,112,0.7320261437908496,0.3782507192466853,2,Knowledge and Conceptual Foundations
+Reproducibility Network,2,85,74,0.8705882352941177,0.16423854156738715,5,Learning and Research Design
+Reproducibility crisis (aka Replicability or replication crisis),1,47,44,0.9361702127659575,NA,5,Learning and Research Design
+Research Contribution Metric (*p*),8,68,58,0.8529411764705882,0.30888737825953405,1,"Equity, Diversity, and Inclusion"
+Research Cycle,2,48,44,0.9166666666666666,0.09941459942408933,2,Knowledge and Conceptual Foundations
+Research Data Management,14,234,130,0.5555555555555556,0.4572391900853107,6,Open Science and Digital Infrastructure
+Research Protocol,4,135,106,0.7851851851851852,0.41490342552066833,2,Knowledge and Conceptual Foundations
+Research integrity,5,204,127,0.6225490196078431,0.4322692334467468,5,Learning and Research Design
+Research workflow,11,104,94,0.9038461538461539,0.08541026576900898,1,"Equity, Diversity, and Inclusion"
+Researcher degrees of freedom,1,55,50,0.9090909090909091,NA,3,Scholarly Communication and Publishing
+Responsible Research and Innovation,4,71,60,0.8450704225352113,0.3089573426555028,5,Learning and Research Design
+Reverse p-hacking,4,40,40,1,0.1793588504531816,2,Knowledge and Conceptual Foundations
+Robustness (analyses),29,346,261,0.7543352601156069,0.14271074304778697,1,"Equity, Diversity, and Inclusion"
+STRANGE,2,44,39,0.8863636363636364,0.045444884718921906,1,"Equity, Diversity, and Inclusion"
+Salami slicing,4,103,81,0.7864077669902912,0.3580994638091855,2,Knowledge and Conceptual Foundations
+Scooping,4,76,68,0.8947368421052632,0.09103557319432108,1,"Equity, Diversity, and Inclusion"
+Semantometrics,1,24,24,1,NA,3,Scholarly Communication and Publishing
+Sensitive research,5,94,78,0.8297872340425532,0.2914272016868869,1,"Equity, Diversity, and Inclusion"
+Sequence-determines-credit approach (SDC),1,22,16,0.7272727272727273,NA,3,Scholarly Communication and Publishing
+Single-blind peer review,9,95,67,0.7052631578947368,0.12866675412954667,1,"Equity, Diversity, and Inclusion"
+Slow science,3,87,77,0.8850574712643678,0.20983948514642742,5,Learning and Research Design
+Social class,8,288,182,0.6319444444444444,0.5461751510816562,1,"Equity, Diversity, and Inclusion"
+Social integration,14,263,186,0.7072243346007605,0.37983480375373824,1,"Equity, Diversity, and Inclusion"
+"Society for Open, Reliable, and Transparent Ecology and Evolutionary biology (SORTEE)",1,39,32,0.8205128205128205,NA,5,Learning and Research Design
+Society for the Improvement of Psychological Science (SIPS),1,42,36,0.8571428571428571,NA,5,Learning and Research Design
+Specification Curve Analysis,6,95,85,0.8947368421052632,0.20841083651776568,1,"Equity, Diversity, and Inclusion"
+Statistical Assumptions,4,80,67,0.8375,0.3005258514146246,2,Knowledge and Conceptual Foundations
+Statistical power,2,82,55,0.6707317073170732,0.43908632603246817,4,Statistical Inference and Methods
+Statistical significance,8,211,132,0.6255924170616114,0.34192688016810313,4,Statistical Inference and Methods
+Statistical validity,2,45,41,0.9111111111111111,0.1907426199900111,2,Knowledge and Conceptual Foundations
+StudySwap,1,33,28,0.8484848484848485,NA,5,Learning and Research Design
+Systematic Review,28,583,288,0.4939965694682676,0.4488183815549285,2,Knowledge and Conceptual Foundations
+TRUST Principles,2,33,30,0.9090909090909091,0.05702602549903184,1,"Equity, Diversity, and Inclusion"
+Tenzing,1,64,52,0.8125,NA,3,Scholarly Communication and Publishing
+The Troubling Trio,6,30,29,0.9666666666666667,0.09636303032225578,1,"Equity, Diversity, and Inclusion"
+Theory,36,401,253,0.6309226932668329,0.3349153481156096,2,Knowledge and Conceptual Foundations
+Theory building,3,49,35,0.7142857142857143,0.4006789310941315,2,Knowledge and Conceptual Foundations
+Transparency,80,1267,616,0.4861878453038674,0.2618460336354954,1,"Equity, Diversity, and Inclusion"
+Transparency Checklist,1,63,50,0.7936507936507936,NA,3,Scholarly Communication and Publishing
+Triple-blind peer review,1,28,26,0.9285714285714286,NA,3,Scholarly Communication and Publishing
+Type I error,3,52,34,0.6538461538461539,0.5420678729107611,4,Statistical Inference and Methods
+Type II error,3,62,49,0.7903225806451613,0.4384092424555369,4,Statistical Inference and Methods
+Type M error,2,34,24,0.7058823529411765,0.3403270731549383,4,Statistical Inference and Methods
+Type S error,11,90,74,0.8222222222222222,0.19357789267295736,1,"Equity, Diversity, and Inclusion"
+Under-representation,2,41,38,0.926829268292683,0.32311494291847115,1,"Equity, Diversity, and Inclusion"
+Universal design for learning (UDL),54,1144,413,0.361013986013986,0.48452408868234953,5,Learning and Research Design
+Validity,45,531,245,0.4613935969868173,0.33622826112166015,2,Knowledge and Conceptual Foundations
+Version control,4,107,87,0.8130841121495327,0.23129658083959687,6,Open Science and Digital Infrastructure
+Webometrics,2,42,37,0.8809523809523809,0.5126520817795218,3,Scholarly Communication and Publishing
+Z-Curve,2,67,53,0.7910447761194029,0.2032166231632568,3,Scholarly Communication and Publishing
+Zenodo,1,34,31,0.9117647058823529,NA,5,Learning and Research Design
+i10-index,1,12,12,1,NA,3,Scholarly Communication and Publishing
+p*-hacking,1,38,32,0.8421052631578947,NA,3,Scholarly Communication and Publishing
+p*-value,3,117,76,0.6495726495726496,0.4469481945931349,4,Statistical Inference and Methods
