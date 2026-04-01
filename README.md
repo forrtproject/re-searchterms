@@ -14,13 +14,7 @@ The platform enables users to:
 
 *Re-SearchTerms* was originally developed as part of the doctoral dissertation of Anna Yi Leung, which examined conceptual variability and terminological ambiguity in open scholarship and psychological science.
 
-In collaboration with FORRT, the current version represents an expanded and evolving platform that:
-
-* integrates a larger and more diverse set of definitions
-* introduces new analytical features
-* improves interactivity and accessibility
-
-Ongoing development aims to:
+In collaboration with FORRT, the current version represents an expanded and evolving platform that aims to:
 
 * expand the dataset in alignment with the development of the FORRT Glossary
 * introduce new analytical features
