@@ -104,12 +104,6 @@ data
 
 ---
 
-## Project Status
-
-The platform is currently under active development. It will continue to evolve through dataset expansion, feature development, and community feedback. Please stay tuned for future updates.
-
----
-
 ## Project Personnel
 
 **Project Lead**
