@@ -18,7 +18,7 @@ library(tibble)
 df_bydefinition <- read.csv("data/df_bydefinition.csv", stringsAsFactors = FALSE)
 pairwise_cosine_similarity <- read.csv("data/pairwise_cosine_similarity.csv", stringsAsFactors = FALSE)
 df_byterm <- read.csv("data/df_byterm.csv", stringsAsFactors = FALSE)
-# df_umap <- read.csv("data/umap_df.csv", stringsAsFactors = FALSE)
+df_umap <- read.csv("data/umap_df.csv", stringsAsFactors = FALSE)
 # 
 # # Fix df_umap column names
 # df_umap <- df_umap %>%
@@ -46,586 +46,750 @@ pairwise_cosine_similarity <- pairwise_cosine_similarity %>%
 
 ui <- fluidPage(
   
-  # Logos + Title Header
+  tags$head(
+    tags$style(HTML("
+      html, body {
+        background-color: #FEFDF6 !important;
+        margin: 0;
+        padding: 0;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 14px;
+      }
+      
+      .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      
+      /* Top brand bar */
+      .top-brand-bar {
+        background-color: #243C35;
+        color: white;
+        padding: 10px 20px;
+      }
+      
+      .brand-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      
+      .brand-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+      }
+      
+      .brand-logo {
+        height: 44px;
+        width: auto;
+        display: block;
+      }
+      
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+      }
+      
+      .brand-title {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.05;
+        color: white;
+      }
+      
+      .brand-subtitle {
+        margin: 2px 0 0 0;
+        font-size: 13px;
+        color: rgba(255,255,255,0.9);
+        line-height: 1.2;
+      }
+      
+      .brand-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      
+      .brand-link {
+        color: white !important;
+        text-decoration: none !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+      
+      .brand-link:hover,
+      .brand-link:focus {
+        color: white !important;
+        background-color: rgba(255,255,255,0.10);
+        text-decoration: none !important;
+      }
+      
+      .main-content-wrap {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 12px 16px 20px 16px;
+        background-color: #FEFDF6;
+      }
+      
+      .tab-content,
+      .tab-pane {
+        background-color: #FEFDF6 !important;
+      }
+      
+      .sidebar-panel-soft {
+        background-color: #F4F1E8;
+        border: 1px solid #E2DDD0;
+        border-radius: 10px;
+        padding: 12px;
+      }
+      
+      .tutorial-box {
+        margin: 8px 0;
+        padding: 8px;
+        background-color: #EEF3F0;
+        border-left: 4px solid #243C35;
+        border-radius: 4px;
+      }
+      
+      .home-card {
+        background-color: #F4F1E8;
+        border-left: 5px solid #243C35;
+        padding: 14px;
+        border-radius: 6px;
+        min-height: 165px;
+      }
+      
+      .legend-box-orange {
+        margin-top: 8px;
+        padding: 8px;
+        border-left: 4px solid #f39c12;
+        background-color: #fff7e6;
+        font-size: 12px;
+        border-radius: 4px;
+      }
+      
+      .legend-box-green {
+        margin-top: 8px;
+        padding: 8px;
+        border-left: 4px solid #243C35;
+        background-color: #EEF3F0;
+        font-size: 12px;
+        border-radius: 4px;
+      }
+      
+      .shiny-input-container {
+        width: 100% !important;
+      }
+      
+      h1 { font-size: 22px; }
+      h2 { font-size: 20px; }
+      h3 { font-size: 18px; }
+      h4 { font-size: 17px; }
+      h5 { font-size: 15px; }
+      
+      p, li, label, .help-block {
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      
+      /* Dataset table's readability */
+      table.dataTable.nowrap th,
+      table.dataTable.nowrap td {
+        white-space: nowrap !important;
+        vertical-align: middle !important;
+      }
+      
+      /* Compact row height */
+      table.dataTable.compact tbody th,
+      table.dataTable.compact tbody td {
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+      }
+      
+      /* Make the horizontal scrollbar clearly visible */
+      .dataTables_wrapper .dataTables_scroll {
+        overflow: visible !important;
+      }
+      
+      .dataTables_wrapper .dataTables_scrollBody {
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+        border-bottom: 1px solid #d9d9d9;
+      }
+      
+      /* Style the scrollbar */
+      .dataTables_wrapper .dataTables_scrollBody::-webkit-scrollbar {
+        height: 10px;
+      }
+      
+      .dataTables_wrapper .dataTables_scrollBody::-webkit-scrollbar-thumb {
+        background: #b8b8b8;
+        border-radius: 6px;
+      }
+      
+      .dataTables_wrapper .dataTables_scrollBody::-webkit-scrollbar-track {
+        background: #ececec;
+      }
+      
+      /* Ensure logo container inherits navbar color */
+      .navbar, .navbar * {
+        background-color: #243C35 !important;
+      }
+      
+      /* Fix transparent PNG rendering */
+      img {
+        background: transparent !important;
+      }
+    "))
+  ),
+  
+  theme = bs_theme(
+    bootswatch = "flatly",
+    primary = "#243C35",
+    base_font = font_google("IBM Plex Sans"),
+    font_scale = 1.1
+  ),
+  
+  # Top brand bar with all navigation
   tags$div(
-    style = "
-    padding: 15px 20px;
-    background-color: #fefdf6;
-    border-bottom: 2px solid #ddd;
-    text-align: center;
+    class = "top-brand-bar",
+    tags$div(
+      class = "brand-inner",
+      
+      tags$div(
+        style = "
+    display: flex;
+    align-items: center;
+    gap: 12px;
   ",
-    
-    # Main Title
-    fluidRow(
-      column(
-        width = 3  # empty spacer (left)
-      ),
-      column(
-        width = 6,
-        div(
-          style = "text-align: center;",
-          h1(
-            "Re-SearchTerms",
-            style = "font-size: 32px; font-weight: 600; margin-bottom: 5px;"
-          ),
-          p(
-            "A Living and Expanding Terminology Platform in Collaboration with FORRT",
-            style = "margin-top: 0px;"
-          )
+        
+        img(
+          src = "forrt_logo_inverted.png",
+          style = "
+      height: 32px;
+      width: auto;
+      background-color: transparent;
+      display: block;
+    "
+        ),
+        
+        tags$div(
+          h1("Re-SearchTerms", style = "margin: 0; font-size: 22px; color: white;"),
+          p("A Living and Expanding Terminology Platform in Collaboration with FORRT",
+            style = "margin: 0; font-size: 12px; color: #d9e3dc;")
         )
       ),
-      column(
-        width = 3,
-        div(
-          style = "text-align: right; padding-top: 10px;",
-          img(
-            src = "forrt_logo.jpg",
-            height = "40px"
-          )
-        )
+      
+      tags$div(
+        class = "brand-right",
+        actionLink("nav_home", "Home", class = "brand-link"),
+        actionLink("nav_dataset", "Dataset", class = "brand-link"),
+        actionLink("nav_words", "Word-Level", class = "brand-link"),
+        actionLink("nav_definitions", "Definitions", class = "brand-link"),
+        actionLink("nav_terms", "Terms", class = "brand-link"),
+        actionLink("nav_videos", "Videos", class = "brand-link"),
+        actionLink("nav_about", "About", class = "brand-link")
       )
     )
   ),
   
-  navbarPage(
-    title = NULL,
-    id = "main_navbar",
-    theme = bs_theme(bootswatch = "flatly", primary = "#3A5A40", base_font = font_google("IBM Plex Sans"), font_scale = 1.1),
+  # # Navigation bar under brand bar
+  # tags$div(
+  #   class = "custom-nav-bar",
+  #   tags$div(
+  #     class = "custom-nav-inner",
+  #     actionLink("nav_home", "Home", class = "custom-nav-link"),
+  #     actionLink("nav_dataset", "Dataset", class = "custom-nav-link"),
+  #     actionLink("nav_words", "Word-Level Analysis", class = "custom-nav-link"),
+  #     actionLink("nav_definitions", "Definition-Level Analysis", class = "custom-nav-link"),
+  #     actionLink("nav_terms", "Term-Level Analysis", class = "custom-nav-link")
+  #   )
+  # ),
+  
+  # Main content
+  div(
+    class = "main-content-wrap",
     
-    tags$head(
-      tags$style(HTML("
-    /* Prevent wrapping */
-    .navbar-nav {
-      white-space: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .navbar-nav > li {
-      display: inline-block !important;
-      float: none !important;
-    }
-    
-    .navbar {
-      min-height: 44px !important;
-      margin-bottom: 0 !important;
-    }
-
-    .navbar-nav > li > a {
-      padding-top: 10px !important;
-      padding-bottom: 10px !important;
-      line-height: 20px !important;
-    }
-
-    .navbar-brand {
-      padding-top: 10px !important;
-      padding-bottom: 10px !important;
-      height: 44px !important;
-    }
-    
-    .navbar-collapse {
-      display: flex !important;
-      justify-content: center !important;
-    }
-
-    .navbar-nav {
-      float: none !important;
-      margin: 0 auto !important;
-      display: flex !important;
-      justify-content: center !important;
-    }
-    
-    .navbar-nav > li {
-      float: none !important;
-    }
-
-    /* Hide ugly scrollbar (optional) */
-    .navbar-nav::-webkit-scrollbar {
-      display: none;
-    }
-    
-    /* Specify the background colour */
-    .tab-content,
-    .tab-pane {
-      background-color: #FEFDF6 !important;
-    }
-    
-    html, body {
-      background-color: #FEFDF6 !important;
-    }
-
-    .content-wrapper, .right-side {
-      background-color: #FEFDF6 !important;
-    }
-    
-    .tab-content {
-      padding: 20px 15px;
-    }
-  "))
-    ),
-    
-    # Home #
-    tabPanel("Home", value = "home",
-             div(
-               style = "padding: 30px; max-width: 1200px; margin: auto; background-color: #FEFDF6;",
-               
-               h4(
-                 "Explore How Research Terms Are Defined Across Sources",
-                 style = "font-weight: 600; margin-bottom: 10px;"
-               ),
-               
-               p(
-                 tags$em("Re-SearchTerms"), " is an interactive platform for comparing definitions of research concepts across multiple sources, including FORRT, Wiktionary, and academic texts.",
-                 style = "font-size: 17px; max-width: 950px;"
-               ),
-               
-               p(
-                 "Use our app to investigate conceptual variation, semantic similarity, and differences in how terms are framed across scholarly communities.",
-                 style = "font-size: 16px; max-width: 950px; color: #555;"
-               ),
-               
-               tags$hr(),
-               
-               fluidRow(
-                 column(
-                   width = 3,
-                   div(
-                     style = "background-color: #f4f8f2; border-left: 5px solid #3A5A40; padding: 18px; border-radius: 6px; min-height: 180px;",
-                     h4("Dataset"),
-                     p("Browse, filter, and download the full database of definitions and metadata."),
-                     actionLink("go_dataset", "Open Dataset", style = "font-weight: 600; color: #2c5e3f;")
-                   )
-                 ),
-                 column(
-                   width = 3,
-                   div(
-                     style = "background-color: #f4f8f2; border-left: 5px solid #3A5A40; padding: 18px; border-radius: 6px; min-height: 180px;",
-                     h4("Word-Level Analysis"),
-                     p("Examine wording patterns and co-occurrence structures across definitions of a concept."),
-                     actionLink("go_words", "Open Word-Level Analysis", style = "font-weight: 600; color: #2c5e3f;")
-                   )
-                 ),
-                 column(
-                   width = 3,
-                   div(
-                     style = "background-color: #f4f8f2; border-left: 5px solid #3A5A40; padding: 18px; border-radius: 6px; min-height: 180px;",
-                     h4("Definition-Level Analysis"),
-                     p("Compare individual definitions and inspect semantic similarity across sources."),
-                     actionLink("go_definitions", "Open Definition-Level Analysis", style = "font-weight: 600; color: #2c5e3f;")
-                   )
-                 ),
-                 column(
-                   width = 3,
-                   div(
-                     style = "background-color: #f4f8f2; border-left: 5px solid #3A5A40; padding: 18px; border-radius: 6px; min-height: 180px;",
-                     h4("Term-Level Analysis"),
-                     p("Explore relationships between concepts through co-occurrence, clustering, and lexical variation."),
-                     actionLink("go_terms", "Open Term-Level Analysis", style = "font-weight: 600; color: #2c5e3f;")
-                   )
-                 )
-               ),
-               
-               tags$hr(style = "margin-top: 30px;"),
-               
-               h4("Why use Re-SearchTerms?"),
-               tags$ul(
-                 tags$li("Compare how the same concept is defined across different sources."),
-                 tags$li("Identify when similar labels refer to different meanings, or different labels refer to similar meanings."),
-                 tags$li("Inspect semantic similarity between definitions using embedding-based analyses."),
-                 tags$li("Support careful and transparent terminology choices in research writing.")
-               ),
-               
-               tags$hr(),
-               
-               h4("Video Tutorials"),
-               p("New to the app? Start with our tutorial playlist for guided walkthroughs of each feature."),
-               actionLink("go_videos", "Open Video Tutorials", style = "font-weight: 600; color: #2c5e3f; font-size: 16px;")
-             )
-    ),
-    
-    # Dataset #
-    tabPanel("Dataset", value = "dataset",
-             sidebarLayout(
-               sidebarPanel(
-                 tags$div(
-                   style = "margin: 10px 0; padding: 10px; background-color: #f4f8f2; border-left: 4px solid #3A5A40;",
-                   actionLink("tutorial_dataset", "▶ Watch tutorial for this page",
-                              style = "font-weight: 600; color: #2c5e3f;")
-                 ),
-                 h4("Filter Dataset"),
-                 p("Use the filters below to explore the dataset:"),
-                 tags$ul(
-                   tags$li("Filter by cluster, term, or source."),
-                   tags$li("Reset filters to view the entire dataset."),
-                   tags$li("Download the filtered dataset for offline use.")
-                 ),
-                 hr(),
-                 selectInput("filterCluster", "Cluster Name:", choices = NULL, multiple = TRUE),
-                 selectInput("filterTerm", "Term:", choices = NULL, multiple = TRUE),
-                 selectInput("filterSource", "Source:", choices = NULL, multiple = TRUE),
-                 actionButton("resetFilters", "Reset Filters", icon = icon("redo")),
-                 br(), br(),
-                 downloadButton("downloadDatasetFiltered", "Download Filtered Dataset"),
-                 width = 3
-               ),
-               mainPanel(
-                 h4("Dataset Table"),
-                 DTOutput("dataTable", width = "100%"),
-                 width = 9
-               )
-             )
-    ),
-    
-    # Word-Level Analysis #
-    tabPanel("Word-Level Analysis", value = "words",
-             sidebarLayout(
-               sidebarPanel(
-                 tags$div(
-                   style = "margin: 10px 0; padding: 10px; background-color: #f4f8f2; border-left: 4px solid #3A5A40;",
-                   actionLink("tutorial_words", "▶ Watch tutorial for this page",
-                              style = "font-weight: 600; color: #2c5e3f;")
-                 ),
-                 width = 3,
-                 h4("Word-Level Analysis"),
-                 p("Explore word-level patterns across definitions of a term."),
-                 tags$ul(
-                   tags$li("Select a term."),
-                   tags$li("Adjust the minimum co-occurrence frequency to filter the network."),
-                   tags$li("If only one definition exists: word-frequency chart; otherwise: co-occurrence network.")
-                 ),
-                 br(),
-                 selectizeInput("selectedTermWord", "Select Term:", choices = NULL, selected = ""),
-                 sliderInput("frequencyThreshold", "Minimum Co-Occurrence Frequency:", min = 1, max = 20, value = 2),
-                 helpText(
-                   "If nothing appears, try lowering the threshold. ",
-                   "For terms with many words, a lower threshold may create a very dense network and slow down rendering. ",
-                   "If the network does not load or becomes unresponsive, increase the threshold to simplify the visualisation."
-                 )
-               ),
-               mainPanel(
-                 width = 9,
-                 h4("Word Co-Occurrence Visualisation"),
-                 uiOutput("wordCooccurrencePlot", height = "600px")
-               )
-             )
-    ),
-    
-    # Definition-Level Analysis #
-    tabPanel("Definition-Level Analysis", value = "definitions",
-             sidebarLayout(
-               sidebarPanel(
-                 tags$div(
-                   style = "margin: 10px 0; padding: 10px; background-color: #f4f8f2; border-left: 4px solid #3A5A40;",
-                   actionLink("tutorial_definitions", "▶ Watch tutorial for this page",
-                              style = "font-weight: 600; color: #2c5e3f;")
-                 ),
-                 width = 3,
-                 h4("Definition-Level Analysis"),
-                 tags$ul(
-                   tags$li("Select a term; the network updates automatically."),
-                   tags$li(HTML("<strong>Edges represent cosine similarity</strong> between definitions based on their embedding vectors.")),
-                   tags$li("Thicker edges indicate greater similarity in semantic meaning (not just shared words)."),
-                   tags$li("Click a node to view the full definition."),
-                   tags$li("Click an edge to compare the two connected definitions in detail.")
-                 ),
-                 selectizeInput("selectedDefinitionTerm", "Select Term:", choices = NULL, selected = ""),
-                 tags$div(
-                   style = "
-    margin-top: 10px;
-    padding: 10px;
-    border-left: 4px solid #f39c12;
-    background-color: #fff7e6;
-    font-size: 13px;
-  ",
-                   tags$strong("Node legend"),
-                   tags$ul(
-                     tags$li(HTML("⭐ <strong>Star</strong>: FORRT definitions")),
-                     tags$li(HTML("🔺 <strong>Triangle</strong>: Wiktionary definitions")),
-                     tags$li("⚪ Circular nodes: other sources"),
-                     tags$li("Node colour: cluster membership")
-                   )
-                 ),
-                 tags$div(
-                   style = "
-    margin-top: 10px;
-    padding: 10px;
-    border-left: 4px solid #3A5A40;
-    background-color: #f4f8f2;
-    font-size: 13px;
-  ",
-                   tags$strong("Term note"),
-                   tags$p(
-                     tags$strong("Canonical term"), " refers to the concept used to group related definitions in the app."
-                   ),
-                   tags$p(
-                     tags$strong("Source term"), " refers to the exact term name used by the original source for that definition."
-                   )
-                 )
-               ),
-               mainPanel(
-                 width = 9,
-                 h4("Definition Relationship Network"),
-                 visNetworkOutput("definitionNetwork", height = "500px"),
-                 h5("Selected Definition Comparison:"),
-                 uiOutput("edgeComparison"),
-                 h5("Selected Definition:"),
-                 textOutput("nodeDefinition"),
-                 br(),
-                 strong("Canonical term: "),
-                 textOutput("nodeConcept"),
-                 br(),
-                 strong("Source term: "),
-                 textOutput("nodeTerm"),
-                 br(),
-                 strong("Source: "),
-                 textOutput("nodeSource"),
-                 br(),
-                 strong("Chapter source: "),
-                 uiOutput("nodeChapterTitle"),
-                 br(),
-                 strong("Book source: "),
-                 uiOutput("nodeBookTitle"),
-                 br(),
-                 textOutput("nodeDisplayNote"),
-                 br(),
-                 strong("Link: "),
-                 uiOutput("nodeHyperlink"),
-               )
-             )
-    ),
-    
-    # Term-Level Analysis #
-    tabPanel("Term-Level Analysis", value = "terms",
-             sidebarLayout(
-               sidebarPanel(
-                 width = 3,
-                 h4("Term-Level Analysis"),
-                 selectInput("termAnalysisMode", "Analysis Mode:",
-                             choices = c("Word Co-Occurrence Network", "Clustering (Sentence Embeddings)", "Types & Tokens Analysis")
-                 ),
-                 
-                 conditionalPanel(
-                   condition = "input.termAnalysisMode == 'Word Co-Occurrence Network'",
-                   tags$div(
-                     style = "margin: 10px 0; padding: 10px; background-color: #f4f8f2; border-left: 4px solid #3A5A40;",
-                     actionLink("tutorial_term_cooccurrence", "▶ Watch tutorial for this mode",
-                                style = "font-weight: 600; color: #2c5e3f;")
-                   ),
-                   tags$ul(
-                     tags$li("Adjust the threshold to filter connections."),
-                     tags$li("Select a term to highlight.")
-                   ),
-                   selectizeInput("selectedTerm", "Highlight Term:", choices = NULL, selected = ""),
-                   sliderInput("cooccurrenceThreshold", "Minimum Co-Occurrence:", min = 1, max = 50, value = 25)
-                 ),
-                 
-                 conditionalPanel(
-                   condition = "input.termAnalysisMode == 'Clustering (Sentence Embeddings)'",
-                   tags$div(
-                     style = "margin: 10px 0; padding: 10px; background-color: #f4f8f2; border-left: 4px solid #3A5A40;",
-                     actionLink("tutorial_term_clustering", "▶ Watch tutorial for this mode",
-                                style = "font-weight: 600; color: #2c5e3f;")
-                   ),
-                   tags$ul(tags$li("Select a term to highlight on the UMAP plot.")),
-                   selectizeInput("highlightedTerm", "Highlight Term:", choices = NULL, selected = "")
-                 ),
-                 
-                 conditionalPanel(
-                   condition = "input.termAnalysisMode == 'Types & Tokens Analysis'",
-                   conditionalPanel(
-                     condition = "input.termAnalysisMode == 'Types & Tokens Analysis'",
-                     tags$div(
-                       style = "margin: 10px 0; padding: 10px; background-color: #f4f8f2; border-left: 4px solid #3A5A40;",
-                       actionLink("tutorial_term_types", "▶ Watch tutorial for this mode",
-                                  style = "font-weight: 600; color: #2c5e3f;")
-                     ),
-                     
-                     div(
-                       style = "margin: 10px 0;",
-                       actionButton("generateTable", "Generate Table", icon = icon("table"),
-                                    style = "width: 100%; font-size: 16px; padding: 10px 12px;")
-                     ),
-                     
-                     sliderInput("typesFilter", "Filter by Types:", min = 1, max = 100, value = c(1, 100)),
-                     sliderInput("tokensFilter", "Filter by Tokens:", min = 1, max = 1000, value = c(1, 1000)),
-                     sliderInput("ttrFilter", "Filter by Type-to-Token Ratio:", min = 0, max = 1, step = 0.01, value = c(0, 1))
-                   )
-                 )
-               ),
-               
-               mainPanel(
-                 width = 9,
-                 
-                 conditionalPanel(
-                   condition = "input.termAnalysisMode == 'Word Co-Occurrence Network'",
-                   h4("Word Co-Occurrence Network"),
-                   visNetworkOutput("termNetwork", height = "500px"),
-                   br(),
-                   uiOutput("tableTitle"),
-                   DTOutput("cooccurrenceTable", height = "400px")
-                 ),
-                 
-                 conditionalPanel(
-                   condition = "input.termAnalysisMode == 'Clustering (Sentence Embeddings)'",
-                   h4("Clustering Visualisation"),
-                   plotlyOutput("clusteringPlot", height = "400px"),
-                   uiOutput("closestTermsTableTitle"),
-                   DTOutput("closestTermsTable", height = "400px")
-                 ),
-                 
-                 conditionalPanel(
-                   condition = "input.termAnalysisMode == 'Types & Tokens Analysis'",
-                   h4("Types & Tokens Analysis Visualisation"),
-                   plotlyOutput("typesTokensPlot", height = "400px"),
-                   hr(),
-                   h4("Filtered data table"),
-                   DTOutput("filteredTable")
-                 )
-               )
-             )
-    ),
-    
-    # Youtube Video Playlist
-    tabPanel(
-      "Video Tutorials", value = "videos",
-      div(
-        style = "padding: 20px; max-width: 1100px; margin: auto;",
-        
-        h2("Video Tutorials"),
-        
-        p(
-          "Watch our ", tags$em("Re-SearchTerms"), " video tutorials to learn more about our app's features.",
-          "Use the playlist menu in the top-right corner of the video player to browse all available tutorials."
-        ),
-        
-        tags$div(
-          style = "margin-top: 20px;",
-          tags$iframe(
-            width = "100%",
-            height = "650",
-            src = "https://www.youtube.com/embed/videoseries?list=PLSLpkUCilSvrPyKLTgc8KWtMx7tPiiLVp",
-            title = "Re-SearchTerms Tutorial Playlist",
-            frameborder = "0",
-            allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
-            allowfullscreen = NA,
-            style = "border: none; border-radius: 8px;"
+    tabsetPanel(
+      id = "main_tabs",
+      type = "hidden",
+      
+      # Home
+      tabPanel(
+        title = "home", value = "home",
+        div(
+          style = "padding: 10px 10px 30px 10px; max-width: 1200px; margin: auto; background-color: #FEFDF6;",
+          
+          h4(
+            "Explore How Research Terms Are Defined Across Sources",
+            style = "font-weight: 600; margin-bottom: 10px;"
+          ),
+          
+          p(
+            tags$em("Re-SearchTerms"), " is an interactive platform for comparing definitions of research concepts across multiple sources, including FORRT, Wiktionary, and academic texts.",
+            style = "font-size: 17px; max-width: 950px;"
+          ),
+          
+          p(
+            "Use our app to investigate conceptual variation, semantic similarity, and differences in how terms are framed across scholarly communities.",
+            style = "font-size: 16px; max-width: 950px; color: #555;"
+          ),
+          
+          tags$hr(),
+          
+          fluidRow(
+            column(
+              width = 3,
+              div(
+                class = "home-card",
+                h4("Dataset"),
+                p("Browse, filter, and download the full database of definitions and metadata."),
+                actionLink("go_dataset", "Open Dataset", style = "font-weight: 600; color: #243C35;")
+              )
+            ),
+            column(
+              width = 3,
+              div(
+                class = "home-card",
+                h4("Word-Level Analysis"),
+                p("Examine wording patterns and co-occurrence structures across definitions of a concept."),
+                actionLink("go_words", "Open Word-Level Analysis", style = "font-weight: 600; color: #243C35;")
+              )
+            ),
+            column(
+              width = 3,
+              div(
+                class = "home-card",
+                h4("Definition-Level Analysis"),
+                p("Compare individual definitions and inspect semantic similarity across sources."),
+                actionLink("go_definitions", "Open Definition-Level Analysis", style = "font-weight: 600; color: #243C35;")
+              )
+            ),
+            column(
+              width = 3,
+              div(
+                class = "home-card",
+                h4("Term-Level Analysis"),
+                p("Explore relationships between concepts through co-occurrence, clustering, and lexical variation."),
+                actionLink("go_terms", "Open Term-Level Analysis", style = "font-weight: 600; color: #243C35;")
+              )
+            )
+          ),
+          
+          tags$hr(style = "margin-top: 30px;"),
+          
+          h4("Why use Re-SearchTerms?"),
+          tags$ul(
+            tags$li("Compare how the same concept is defined across different sources."),
+            tags$li("Identify when similar labels refer to different meanings, or different labels refer to similar meanings."),
+            tags$li("Inspect semantic similarity between definitions using embedding-based analyses."),
+            tags$li("Support careful and transparent terminology choices in research writing.")
+          ),
+          
+          tags$hr(),
+          
+          h4("Video Tutorials"),
+          p("New to the app? Start with our tutorial playlist for guided walkthroughs of each feature."),
+          actionLink("go_videos", "Open Video Tutorials", style = "font-weight: 600; color: #243C35; font-size: 16px;")
+        )
+      ),
+      
+      # Dataset
+      tabPanel(
+        title = "dataset", value = "dataset",
+        sidebarLayout(
+          sidebarPanel(
+            class = "sidebar-panel-soft",
+            tags$div(
+              class = "tutorial-box",
+              actionLink("tutorial_dataset", "▶ Watch tutorial for this page",
+                         style = "font-weight: 600; color: #243C35;")
+            ),
+            h4("Filter Dataset"),
+            p("Use the filters below to explore the dataset:"),
+            tags$ul(
+              tags$li("Filter by cluster, term, or source."),
+              tags$li("Reset filters to view the entire dataset."),
+              tags$li("Download the filtered dataset for offline use.")
+            ),
+            hr(),
+            selectInput("filterCluster", "Cluster Name:", choices = NULL, multiple = TRUE),
+            selectInput("filterTerm", "Term:", choices = NULL, multiple = TRUE),
+            selectInput("filterSource", "Source:", choices = NULL, multiple = TRUE),
+            actionButton("resetFilters", "Reset Filters", icon = icon("redo")),
+            br(), br(),
+            downloadButton("downloadDatasetFiltered", "Download Filtered Dataset"),
+            width = 3
+          ),
+          mainPanel(
+            h4("Dataset Table"),
+            DTOutput("dataTable", width = "100%"),
+            width = 9
           )
         )
-      )
-    ),
-    
-    # About #
-    tabPanel(
-      "About", value = "about",
-      div(
-        style = "padding: 20px; max-width: 900px; margin: auto;",
-        
-        h4("About ", tags$em("Re-SearchTerms")),
-        
-        p(
-          tags$em("Re-SearchTerms"), " is an interactive Shiny application designed for exploring how research terms in open scholarship, metascience, and research practice are defined across different sources."
-        ),
-        
-        p(
-          "The platform enables you to compare definitions, examine relationships between terms and definitions, 
-      and analyse patterns in the language used to describe core concepts in research."
-        ),
-        
-        tags$hr(),
-        
-        h4("From a Research Tool to a Living Platform"),
-        
-        p(
-          tags$em("Re-SearchTerms"), " was originally developed as part of the doctoral dissertation of Anna Yi Leung, 
-      which examined conceptual variability and terminological ambiguity in open scholarship and psychological science."
-        ),
-        
-        p(
-          "The current version represents an expanded and evolving platform that builds on this initial work. 
-      It integrates a larger and more diverse set of definitions, introduces new analytical features 
-      (e.g., word-level, definition-level, and embedding-based analyses), and improves the interactivity 
-      and accessibility of the original application."
-        ),
-        
-        p(
-          "Rather than a static resource, ", tags$em("Re-SearchTerms"), " is being developed as a living and expanding terminology platform. 
-      Its goal is to support continuous reflection, discussion, and refinement of how key research concepts are defined and used across disciplines."
-        ),
-        
-        tags$hr(),
-        
-        h4("Collaboration with FORRT"),
-        
-        p(
-          tags$em("Re-SearchTerms"), " is developed in collaboration with the Framework for Open and Reproducible Research Training (FORRT)."
-        ),
-        
-        p(
-          "This app incorporates terminology curated by FORRT (the FORRT Glossary) alongside other sources 
-      (e.g., Wiktionary and academic publications), enabling users to explore how definitions vary across communities and contexts."
-        ),
-        
-        p(
-          "Ongoing development aims to further expand the dataset, introduce new features, and support community contributions, 
-      making the platform a shared resource for researchers, educators, and practitioners. Stay tuned for our newest development!"
-        ),
-        
-        tags$hr(),
-        
-        h4("Citation"),
-        
-        p(
-          "The development and evaluation of ", tags$em("Re-SearchTerms"), " has been published in ", tags$em("Meta-Psychology"), ".",
-        ),
-        
-        p("Publication:"),
-        
-        p(
-          "Anna Yi Leung, Daniel Kristanto, & Xenia Schmalz. (2026, accepted). ",
-          tags$a(
-            "Re-SearchTerms: A Shiny app for exploring terminology variations in psychology and metascience",
-            href = "https://osf.io/preprints/osf/qsp7x_v2",
-            target = "_blank"
+      ),
+      
+      # Word-Level Analysis
+      tabPanel(
+        title = "words", value = "words",
+        sidebarLayout(
+          sidebarPanel(
+            class = "sidebar-panel-soft",
+            tags$div(
+              class = "tutorial-box",
+              actionLink("tutorial_words", "▶ Watch tutorial for this page",
+                         style = "font-weight: 600; color: #243C35;")
+            ),
+            width = 3,
+            h4("Word-Level Analysis"),
+            p("Explore word-level patterns across definitions of a term."),
+            tags$ul(
+              tags$li("Select a term."),
+              tags$li("Adjust the minimum co-occurrence frequency to filter the network."),
+              tags$li("If only one definition exists: word-frequency chart; otherwise: co-occurrence network.")
+            ),
+            br(),
+            selectizeInput("selectedTermWord", "Select Term:", choices = NULL, selected = ""),
+            sliderInput("frequencyThreshold", "Minimum Co-Occurrence Frequency:", min = 1, max = 20, value = 2),
+            helpText(
+              "If nothing appears, try lowering the threshold. ",
+              "For terms with many words, a lower threshold may create a very dense network and slow down rendering. ",
+              "If the network does not load or becomes unresponsive, increase the threshold to simplify the visualisation."
+            )
           ),
-          ". ", tags$em("Meta-Psychology"), "."
-        ),
-        
-        tags$hr(),
-        
-        h4("Project Personnel"),
-        
-        p(
-          strong("Project Lead: "),
-          a("Anna Yi Leung", href = "https://annayileung.com", target = "_blank"),
-          " (Ludwig-Maximilians-University of Munich, Germany)"
-        ),
-        
-        p(
-          strong("Co-Project Lead: "),
-          a("Dr. Daniel Kristanto", href = "https://uol.de/psychologie/statistik/daniel-kristanto", target = "_blank"),
-          " (Carl von Ossietzky Universität Oldenburg, Germany)"
-        ),
-        
-        p(
-          "Our project is open to collaboration, and additional contributors may be acknowledged as the platform evolves."
-        ),
-        
-        tags$hr(),
-        
-        h4("Acknowledgements"),
-        
-        p(
-          "The initial development of ", tags$em("Re-SearchTerms"),
-          " was supported by the ",
-          tags$a(
-            "META-REP Priority Programme",
-            href = "https://www.lmu.de/psy/de/forschung/meta-rep/",
-            target = "_blank"
+          mainPanel(
+            width = 9,
+            h4("Word Co-Occurrence Visualisation"),
+            uiOutput("wordCooccurrencePlot", height = "600px")
+          )
+        )
+      ),
+      
+      # Definition-Level Analysis
+      tabPanel(
+        title = "definitions", value = "definitions",
+        sidebarLayout(
+          sidebarPanel(
+            class = "sidebar-panel-soft",
+            tags$div(
+              class = "tutorial-box",
+              actionLink("tutorial_definitions", "▶ Watch tutorial for this page",
+                         style = "font-weight: 600; color: #243C35;")
+            ),
+            width = 3,
+            h4("Definition-Level Analysis"),
+            tags$ul(
+              tags$li("Select a term; the network updates automatically."),
+              tags$li(HTML("<strong>Edges represent cosine similarity</strong> between definitions based on their embedding vectors.")),
+              tags$li("Thicker edges indicate greater similarity in semantic meaning (not just shared words)."),
+              tags$li("Click a node to view the full definition."),
+              tags$li("Click an edge to compare the two connected definitions in detail.")
+            ),
+            selectizeInput("selectedDefinitionTerm", "Select Term:", choices = NULL, selected = ""),
+            tags$div(
+              class = "legend-box-orange",
+              tags$strong("Node legend"),
+              tags$ul(
+                tags$li(HTML("⭐ <strong>Star</strong>: FORRT definitions")),
+                tags$li(HTML("🔺 <strong>Triangle</strong>: Wiktionary definitions")),
+                tags$li("⚪ Circular nodes: other sources"),
+                tags$li("Node colour: cluster membership")
+              )
+            ),
+            tags$div(
+              class = "legend-box-green",
+              tags$strong("Term note"),
+              tags$p(
+                tags$strong("Canonical term"), " refers to the concept used to group related definitions in the app."
+              ),
+              tags$p(
+                tags$strong("Source term"), " refers to the exact term name used by the original source for that definition."
+              )
+            )
           ),
-          " and the German Research Foundation (DFG). ",
-          "We thank Dr. Xenia Schmalz for her contributions to the first edition of the app. ",
-          "The current version represents an independent, expanded development. We thank Dr. Flavio Azevedo (Director of FORRT) and Dr. Lukas Wallrich (Co-Chair of FORRT) for their technical feedback and for supporting the integration of the project within FORRT."
+          mainPanel(
+            width = 9,
+            h4("Definition Relationship Network"),
+            visNetworkOutput("definitionNetwork", height = "40vh"),
+            h5("Selected Definition Comparison:"),
+            uiOutput("edgeComparison"),
+            h5("Selected Definition:"),
+            textOutput("nodeDefinition"),
+            br(),
+            strong("Canonical term: "),
+            textOutput("nodeConcept"),
+            br(),
+            strong("Source term: "),
+            textOutput("nodeTerm"),
+            br(),
+            strong("Source: "),
+            textOutput("nodeSource"),
+            br(),
+            strong("Chapter source: "),
+            uiOutput("nodeChapterTitle"),
+            br(),
+            strong("Book source: "),
+            uiOutput("nodeBookTitle"),
+            br(),
+            textOutput("nodeDisplayNote"),
+            br(),
+            strong("Link: "),
+            uiOutput("nodeHyperlink")
+          )
+        )
+      ),
+      
+      # Term-Level Analysis
+      tabPanel(
+        title = "terms", value = "terms",
+        sidebarLayout(
+          sidebarPanel(
+            class = "sidebar-panel-soft",
+            width = 3,
+            h4("Term-Level Analysis"),
+            selectInput(
+              "termAnalysisMode", "Analysis Mode:",
+              choices = c(
+                "Word Co-Occurrence Network",
+                "Clustering (Sentence Embeddings)",
+                "Types & Tokens Analysis"
+              )
+            ),
+            
+            conditionalPanel(
+              condition = "input.termAnalysisMode == 'Word Co-Occurrence Network'",
+              tags$div(
+                class = "tutorial-box",
+                actionLink("tutorial_term_cooccurrence", "▶ Watch tutorial for this mode",
+                           style = "font-weight: 600; color: #243C35;")
+              ),
+              tags$ul(
+                tags$li("Adjust the threshold to filter connections."),
+                tags$li("Select a term to highlight.")
+              ),
+              selectizeInput("selectedTerm", "Highlight Term:", choices = NULL, selected = ""),
+              sliderInput("cooccurrenceThreshold", "Minimum Co-Occurrence:", min = 1, max = 50, value = 25)
+            ),
+            
+            conditionalPanel(
+              condition = "input.termAnalysisMode == 'Clustering (Sentence Embeddings)'",
+              tags$div(
+                class = "tutorial-box",
+                actionLink("tutorial_term_clustering", "▶ Watch tutorial for this mode",
+                           style = "font-weight: 600; color: #243C35;")
+              ),
+              tags$ul(tags$li("Select a term to highlight on the UMAP plot.")),
+              selectizeInput("highlightedTerm", "Highlight Term:", choices = NULL, selected = "")
+            ),
+            
+            conditionalPanel(
+              condition = "input.termAnalysisMode == 'Types & Tokens Analysis'",
+              tags$div(
+                class = "tutorial-box",
+                actionLink("tutorial_term_types", "▶ Watch tutorial for this mode",
+                           style = "font-weight: 600; color: #243C35;")
+              ),
+              
+              div(
+                style = "margin: 10px 0;",
+                actionButton(
+                  "generateTable", "Generate Table", icon = icon("table"),
+                  style = "width: 100%; font-size: 16px; padding: 10px 12px;"
+                )
+              ),
+              
+              sliderInput("typesFilter", "Filter by Types:", min = 1, max = 100, value = c(1, 100)),
+              sliderInput("tokensFilter", "Filter by Tokens:", min = 1, max = 1000, value = c(1, 1000)),
+              sliderInput("ttrFilter", "Filter by Type-to-Token Ratio:", min = 0, max = 1, step = 0.01, value = c(0, 1))
+            )
+          ),
+          
+          mainPanel(
+            width = 9,
+            
+            conditionalPanel(
+              condition = "input.termAnalysisMode == 'Word Co-Occurrence Network'",
+              h4("Word Co-Occurrence Network"),
+              visNetworkOutput("termNetwork", height = "60vh"),
+              br(),
+              uiOutput("tableTitle"),
+              DTOutput("cooccurrenceTable", height = "400px")
+            ),
+            
+            conditionalPanel(
+              condition = "input.termAnalysisMode == 'Clustering (Sentence Embeddings)'",
+              h4("Clustering Visualisation"),
+              plotlyOutput("clusteringPlot", height = "400px"),
+              uiOutput("closestTermsTableTitle"),
+              DTOutput("closestTermsTable", height = "400px")
+            ),
+            
+            conditionalPanel(
+              condition = "input.termAnalysisMode == 'Types & Tokens Analysis'",
+              h4("Types & Tokens Analysis Visualisation"),
+              plotlyOutput("typesTokensPlot", height = "400px"),
+              hr(),
+              h4("Filtered data table"),
+              DTOutput("filteredTable")
+            )
+          )
+        )
+      ),
+      
+      # Video Tutorials
+      tabPanel(
+        title = "videos", value = "videos",
+        div(
+          style = "padding: 20px; max-width: 1100px; margin: auto;",
+          
+          h2("Video Tutorials"),
+          
+          p(
+            "Watch our ", tags$em("Re-SearchTerms"), " video tutorials to learn more about our app's features.",
+            "Use the playlist menu in the top-right corner of the video player to browse all available tutorials."
+          ),
+          
+          tags$div(
+            style = "
+    max-width: 900px;
+    margin: 20px auto;
+  ",
+            tags$iframe(
+              width = "100%",
+              height = "420",
+              src = "https://www.youtube.com/embed/videoseries?list=PLSLpkUCilSvrPyKLTgc8KWtMx7tPiiLVp",
+              frameborder = "0",
+              allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+              allowfullscreen = NA,
+              style = "border-radius: 8px;"
+            )
+          )
+        )
+      ),
+      
+      # About
+      tabPanel(
+        title = "about", value = "about",
+        div(
+          style = "padding: 20px; max-width: 900px; margin: auto;",
+          
+          h4("About ", tags$em("Re-SearchTerms")),
+          
+          p(
+            tags$em("Re-SearchTerms"), " is an interactive Shiny application designed for exploring how research terms in open scholarship, metascience, and research practice are defined across different sources."
+          ),
+          
+          p(
+            "The platform enables you to compare definitions, examine relationships between terms and definitions, 
+            and analyse patterns in the language used to describe core concepts in research."
+          ),
+          
+          tags$hr(),
+          
+          h4("From a Research Tool to a Living Platform"),
+          
+          p(
+            tags$em("Re-SearchTerms"), " was originally developed as part of the doctoral dissertation of Anna Yi Leung, 
+            which examined conceptual variability and terminological ambiguity in open scholarship and psychological science."
+          ),
+          
+          p(
+            "The current version represents an expanded and evolving platform that builds on this initial work. 
+            It integrates a larger and more diverse set of definitions, introduces new analytical features 
+            (e.g., word-level, definition-level, and embedding-based analyses), and improves the interactivity 
+            and accessibility of the original application."
+          ),
+          
+          p(
+            "Rather than a static resource, ", tags$em("Re-SearchTerms"), " is being developed as a living and expanding terminology platform. 
+            Its goal is to support continuous reflection, discussion, and refinement of how key research concepts are defined and used across disciplines."
+          ),
+          
+          tags$hr(),
+          
+          h4("Collaboration with FORRT"),
+          
+          p(
+            tags$em("Re-SearchTerms"), " is developed in collaboration with the Framework for Open and Reproducible Research Training (FORRT)."
+          ),
+          
+          p(
+            "This app incorporates terminology curated by FORRT (the FORRT Glossary) alongside other sources 
+            (e.g., Wiktionary and academic publications), enabling users to explore how definitions vary across communities and contexts."
+          ),
+          
+          p(
+            "Ongoing development aims to further expand the dataset, introduce new features, and support community contributions, 
+            making the platform a shared resource for researchers, educators, and practitioners. Stay tuned for our newest development!"
+          ),
+          
+          tags$hr(),
+          
+          h4("Citation"),
+          
+          p(
+            "The development and evaluation of ", tags$em("Re-SearchTerms"), " has been published in ", tags$em("Meta-Psychology"), "."
+          ),
+          
+          p("Publication:"),
+          
+          p(
+            "Anna Yi Leung, Daniel Kristanto, & Xenia Schmalz. (2026, accepted). ",
+            tags$a(
+              "Re-SearchTerms: A Shiny app for exploring terminology variations in psychology and metascience",
+              href = "https://osf.io/preprints/osf/qsp7x_v2",
+              target = "_blank"
+            ),
+            ". ", tags$em("Meta-Psychology"), "."
+          ),
+          
+          tags$hr(),
+          
+          h4("Project Personnel"),
+          
+          p(
+            strong("Project Lead: "),
+            a("Anna Yi Leung", href = "https://annayileung.com", target = "_blank"),
+            " (Ludwig-Maximilians-University of Munich, Germany)"
+          ),
+          
+          p(
+            strong("Co-Project Lead: "),
+            a("Dr. Daniel Kristanto", href = "https://uol.de/psychologie/statistik/daniel-kristanto", target = "_blank"),
+            " (Carl von Ossietzky Universität Oldenburg, Germany)"
+          ),
+          
+          p(
+            "Our project is open to collaboration, and additional contributors may be acknowledged as the platform evolves."
+          ),
+          
+          tags$hr(),
+          
+          h4("Acknowledgements"),
+          
+          p(
+            "The initial development of ", tags$em("Re-SearchTerms"),
+            " was supported by the ",
+            tags$a(
+              "META-REP Priority Programme",
+              href = "https://www.lmu.de/psy/de/forschung/meta-rep/",
+              target = "_blank"
+            ),
+            " and the German Research Foundation (DFG). ",
+            "We thank Dr. Xenia Schmalz for her contributions to the first edition of the app. ",
+            "The current version represents an independent, expanded development. We thank Dr. Flavio Azevedo (Director of FORRT) and Dr. Lukas Wallrich (Co-Chair of FORRT) for their technical feedback and for supporting the integration of the project within FORRT."
+          )
         )
       )
     )
@@ -655,25 +819,53 @@ server <- function(input, output, session) {
     ))
   }
   
-  # Navigation bar
+  # Navigation
+  observeEvent(input$nav_home, {
+    updateTabsetPanel(session, "main_tabs", selected = "home")
+  })
+  
+  observeEvent(input$nav_dataset, {
+    updateTabsetPanel(session, "main_tabs", selected = "dataset")
+  })
+  
+  observeEvent(input$nav_words, {
+    updateTabsetPanel(session, "main_tabs", selected = "words")
+  })
+  
+  observeEvent(input$nav_definitions, {
+    updateTabsetPanel(session, "main_tabs", selected = "definitions")
+  })
+  
+  observeEvent(input$nav_terms, {
+    updateTabsetPanel(session, "main_tabs", selected = "terms")
+  })
+  
+  observeEvent(input$nav_videos, {
+    updateTabsetPanel(session, "main_tabs", selected = "videos")
+  })
+  
+  observeEvent(input$nav_about, {
+    updateTabsetPanel(session, "main_tabs", selected = "about")
+  })
+  
   observeEvent(input$go_dataset, {
-    updateNavbarPage(session, "main_navbar", selected = "dataset")
+    updateTabsetPanel(session, "main_tabs", selected = "dataset")
   })
   
   observeEvent(input$go_words, {
-    updateNavbarPage(session, "main_navbar", selected = "words")
+    updateTabsetPanel(session, "main_tabs", selected = "words")
   })
   
   observeEvent(input$go_definitions, {
-    updateNavbarPage(session, "main_navbar", selected = "definitions")
+    updateTabsetPanel(session, "main_tabs", selected = "definitions")
   })
   
   observeEvent(input$go_terms, {
-    updateNavbarPage(session, "main_navbar", selected = "terms")
+    updateTabsetPanel(session, "main_tabs", selected = "terms")
   })
   
   observeEvent(input$go_videos, {
-    updateNavbarPage(session, "main_navbar", selected = "videos")
+    updateTabsetPanel(session, "main_tabs", selected = "videos")
   })
   
   # Define clusters' colours
@@ -789,14 +981,26 @@ server <- function(input, output, session) {
   output$dataTable <- renderDT({
     datatable(
       filtered_data(),
+      escape = FALSE,
       options = list(
         pageLength = 10,
         scrollX = TRUE,
+        autoWidth = TRUE,
         dom = 'Blfrtip',
         buttons = c('copy', 'csv', 'excel', 'pdf'),
-        columnDefs = list(list(targets = "_all", className = "dt-center"))
+        columnDefs = list(
+          list(className = "dt-center", targets = "_all"),
+          list(width = "140px", targets = 0),  # ID
+          list(width = "120px", targets = 1),  # Source Term
+          list(width = "120px", targets = 2),  # Canonical Term
+          list(width = "100px", targets = 3),  # Source
+          list(width = "110px", targets = 4),  # Retrieval Date
+          list(width = "220px", targets = 5),  # Hyperlink
+          list(width = "500px", targets = 6)   # Definition
+        )
       ),
-      rownames = FALSE
+      rownames = FALSE,
+      class = "stripe hover compact nowrap"
     )
   })
   
@@ -891,10 +1095,22 @@ server <- function(input, output, session) {
       filter(!is.na(connected_term) & weight > 0) %>%
       arrange(desc(weight))
     
+    # map displayed term labels to canonical concepts
+    concept_lookup <- df_bydefinition %>%
+      select(term, concept) %>%
+      distinct()
+    
+    cluster_lookup <- df_byterm %>%
+      select(concept = term, cluster_name) %>%
+      distinct()
+    
     cooccurrence_data <- selected_edges %>%
-      left_join(df_byterm, by = c("connected_term" = "term")) %>%
+      left_join(concept_lookup, by = c("connected_term" = "term")) %>%
+      mutate(concept = ifelse(is.na(concept) | concept == "", connected_term, concept)) %>%
+      left_join(cluster_lookup, by = "concept") %>%
+      distinct(concept, cluster_name, weight, .keep_all = TRUE) %>%
       select(
-        Term = connected_term,
+        `Canonical Concept` = concept,
         `Cluster Name` = cluster_name,
         `No. of Co-Occurring Words` = weight
       )
@@ -916,7 +1132,7 @@ server <- function(input, output, session) {
   output$tableTitle <- renderUI({
     req(input$selectedTerm)
     if (input$selectedTerm == "") return(NULL)
-    h3(paste("Terms with co-occurring words with", input$selectedTerm, "(frequency in descending order):"))
+    h3(paste("Canonical concepts with co-occurring words with", input$selectedTerm, "(frequency in descending order):"))
   })
   
   ######################
