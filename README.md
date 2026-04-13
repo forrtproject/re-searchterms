@@ -125,13 +125,13 @@ The development and evaluation of *Re-SearchTerms* has been accepted for publica
 Citation details will be updated upon publication.
 
 For a detailed description of the conceptual framework, methods, and development of the app, please refer to our preprint:  
-[https://osf.io/preprints/osf/qsp7x_v2]
+https://osf.io/preprints/osf/qsp7x_v2
 
 ---
 
 ## Acknowledgements
 
-The initial development of *Re-SearchTerms* was supported by the META-REP Priority Programme and German Research Foundation (DFG).
+The initial development of *Re-SearchTerms* was supported by the META-REP Priority Programme and the German Research Foundation (DFG).
 
 We thank **Dr. Xenia Schmalz** for her contributions to the first edition of the app.
 
