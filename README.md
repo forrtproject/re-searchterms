@@ -133,7 +133,7 @@ https://osf.io/preprints/osf/qsp7x_v2
 
 The initial development of *Re-SearchTerms* was supported by the META-REP Priority Programme and the German Research Foundation (DFG).
 
-We thank **Dr. Xenia Schmalz** for her contributions to the first edition of the app.
+We thank Dr. Xenia Schmalz for her contributions to the first edition of the app.
 
 The current version represents an independent and expanded development. We thank Dr. Flavio Azevedo (Director of FORRT) and Dr. Lukas Wallrich (Co-Chair of FORRT) for their technical feedback and for supporting the integration of the project within FORRT.
 
