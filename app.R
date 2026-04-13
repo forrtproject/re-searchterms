@@ -331,11 +331,6 @@ ui <- fluidPage(
         div(
           style = "padding: 10px 10px 30px 10px; max-width: 1200px; margin: auto; background-color: #FEFDF6;",
           
-          h4(
-            "Explore How Research Terms Are Defined Across Sources",
-            style = "font-weight: 600; margin-bottom: 10px;"
-          ),
-          
           p(
             tags$em("Re-SearchTerms"), " is an interactive platform for comparing definitions of research concepts across multiple sources, including FORRT, Wiktionary, and academic texts.",
             style = "font-size: 17px; max-width: 950px;"
