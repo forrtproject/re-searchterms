@@ -21,6 +21,6 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: ./www
 
       - uses: actions/deploy-pages@v4
