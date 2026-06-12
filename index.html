@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Re-SearchTerms · FORRT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Third-party CDN libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/styles/vis-network.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <script src="https://tally.so/widgets/embed.js" async></script>
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-block" onclick="showPage('browse', event)">
+      <img src="forrt_logo_inverted.png" alt="FORRT" class="logo-img" />
+      <div class="logo-text">
+        <div class="logo-title">Re-SearchTerms</div>
+        <div class="logo-sub">Explore, Compare, and Contribute Research Definitions</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="nav-btn active" onclick="showPage('browse', event)">Home</button>
+      <button class="nav-btn" onclick="showPage('dataset', event)">Dataset</button>
+      <button class="nav-btn" onclick="showPage('words', event)">Word-Level</button>
+      <button class="nav-btn" onclick="showPage('definitions', event)">Definitions</button>
+      <button class="nav-btn" onclick="showPage('terms', event)">Terms</button>
+      <button class="nav-btn" onclick="showPage('videos', event)">Videos</button>
+      <button class="nav-btn" onclick="showPage('leaderboard', event)">Contributors</button>
+      <button class="nav-btn" onclick="showPage('about', event)">About</button>
+      <div class="nav-divider"></div>
+      <div class="header-auth" id="authArea">
+        <button class="btn-login" onclick="openModal('login')">Log in</button>
+        <button class="btn-signup" onclick="openTallyModal()">Sign up to contribute</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Home -->
+<div class="page active" id="page-browse">
+  <div class="home-content">
+    <div class="home-hero">
+      <div class="home-hero-text">
+        <div class="home-hero-tag">Open Scholarship · Multilingual · Community-driven</div>
+        <h1 class="home-hero-title">Explore how research concepts are defined across sources</h1>
+        <p class="home-hero-sub"><i>Re-SearchTerms</i> compares definitions of terms related to research and open scholarship across the FORRT Glossary, Wiktionary, and academic publications — in English, German, and Chinese. Contribute definitions, annotate existing ones, and help build a living multilingual dataset.</p>
+        <div class="home-hero-actions">
+          <button class="home-btn-primary" onclick="showPage('dataset', event)">Browse terms</button>
+          <button class="home-btn-ghost" onclick="showPage('about', event)">Learn more</button>
+        </div>
+        <div style="margin-top:1.1rem;padding:.85rem 1.1rem;background:linear-gradient(135deg,#eaf2ee,#fff8e6);border:1.5px solid var(--border);border-radius:var(--radius-lg);max-width:560px;">
+          <p style="font-size:.82rem;color:var(--ink-mid);margin:0 0 .6rem;">
+            <strong style="color:var(--green-dark);">✦ Join as a contributor</strong> — submit source-based definitions in English, German, or Chinese; translate definitions from existing sources; or annotate and verify existing entries. All contributors are publicly recognised.
+          </p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+            <button class="home-btn-primary" style="font-size:.78rem;padding:.45rem 1rem;" onclick="currentUser ? showPage('dataset', event) : openTallyModal()">
+              Sign up to contribute
+            </button>
+            <button class="home-btn-ghost" style="font-size:.78rem;padding:.45rem 1rem;" onclick="currentUser ? openModal() : openModal()">
+              Log in
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="home-hero-stats">
+        <div class="home-stat-card"><span class="home-stat-num" id="statTerms">—</span><span class="home-stat-label">Terms</span></div>
+        <div class="home-stat-card"><span class="home-stat-num" id="statDefs">—</span><span class="home-stat-label">Definitions</span></div>
+        <div class="home-stat-card"><span class="home-stat-num" id="statEN">—</span><span class="home-stat-label">English</span></div>
+        <div class="home-stat-card"><span class="home-stat-num" id="statDE">—</span><span class="home-stat-label">German</span></div>
+        <div class="home-stat-card"><span class="home-stat-num" id="statZH">—</span><span class="home-stat-label">Chinese</span></div>
+      </div>
+    </div>
+    <div class="home-tools-section">
+      <div class="home-section-label">Analysis tools</div>
+      <div class="home-tools-grid">
+        <div class="home-tool-card" onclick="showPage('dataset', event)">
+          <div class="home-tool-icon" style="pointer-events:none">&#9783;</div>
+          <div class="home-tool-title" style="pointer-events:none">Dataset</div>
+          <div class="home-tool-desc" style="pointer-events:none">Browse and filter the full database of terms and definitions.</div>
+          <div class="home-tool-cta" style="pointer-events:none">Open Dataset →</div>
+        </div>
+        <div class="home-tool-card" onclick="showPage('words', event)">
+          <div class="home-tool-icon" style="pointer-events:none">&#9636;</div>
+          <div class="home-tool-title" style="pointer-events:none">Word-Level Analysis</div>
+          <div class="home-tool-desc" style="pointer-events:none">Examine wording patterns and co-occurrence structures across definitions of a concept.</div>
+          <div class="home-tool-cta" style="pointer-events:none">Open Word-Level →</div>
+        </div>
+        <div class="home-tool-card" onclick="showPage('definitions', event)">
+          <div class="home-tool-icon" style="pointer-events:none">&#9664;</div>
+          <div class="home-tool-title" style="pointer-events:none">Definition-Level Analysis</div>
+          <div class="home-tool-desc" style="pointer-events:none">Compare individual definitions and inspect semantic similarity across sources.</div>
+          <div class="home-tool-cta" style="pointer-events:none">Open Definition-Level →</div>
+        </div>
+        <div class="home-tool-card" onclick="showPage('terms', event)">
+          <div class="home-tool-icon" style="pointer-events:none">&#9671;</div>
+          <div class="home-tool-title" style="pointer-events:none">Term-Level Analysis</div>
+          <div class="home-tool-desc" style="pointer-events:none">Explore relationships between concepts through co-occurrence, clustering, and lexical diversity.</div>
+          <div class="home-tool-cta" style="pointer-events:none">Open Term-Level →</div>
+        </div>
+      </div>
+    </div>
+    <div class="home-two-col">
+      <div class="home-why">
+        <div class="home-section-label">Why <i>Re-SearchTerms</i>?</div>
+        <ul class="home-why-list">
+          <li><span class="home-why-icon">→</span>Compare how the same concept is defined across different sources</li>
+          <li><span class="home-why-icon">→</span>Identify when similar labels refer to different meanings</li>
+          <li><span class="home-why-icon">→</span>Inspect semantic similarity using embedding-based analyses</li>
+          <li><span class="home-why-icon">→</span>Support careful terminology choices in research writing</li>
+          <li><span class="home-why-icon">→</span>Contribute definitions and expand multilingual coverage</li>
+        </ul>
+      </div>
+      <div class="home-video-cta" onclick="showPage('videos', event)">
+        <div class="home-video-icon">▶</div>
+        <div class="home-video-label">Video Tutorials</div>
+        <div class="home-video-sub">Watch our guided walkthroughs of every feature</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Word-Level Analysis: static browser visualisation -->
+<div class="page" id="page-words">
+  <div class="word-level-page">
+    <div class="word-level-header">
+      <div>
+        <h1 class="word-level-title">Word-Level Analysis</h1>
+        <p class="word-level-sub">Explore word-frequency and word co-occurrence patterns across definitions of a selected term. This static version uses precomputed cleaned tokens from the original Shiny dataset and renders everything directly in the browser.</p>
+      </div>
+      
+    </div>
+
+    <div class="word-level-controls">
+      <div>
+        <label for="wordClusterFilter">Cluster</label>
+        <select id="wordClusterFilter" onchange="filterWordTermsByCluster()">
+          <option value="">All clusters</option>
+        </select>
+      </div>
+      <div>
+        <label for="wordTermSelect">Term</label>
+        <select id="wordTermSelect" onchange="renderWordLevel()">
+          <option value="">Loading terms…</option>
+        </select>
+      </div>
+      <div>
+        <label for="wordViewMode">View</label>
+        <select id="wordViewMode" onchange="renderWordLevel()">
+          <option value="auto">Auto: chart if one definition, network otherwise</option>
+          <option value="frequency">Word frequency chart</option>
+          <option value="network">Co-occurrence network</option>
+        </select>
+      </div>
+      <div>
+        <label for="wordThreshold" style="display:flex;align-items:center;gap:.3rem;">
+          Minimum co-occurrence
+          <span class="help-tip" data-tip="The minimum number of definitions in which two words must co-occur for an edge to be drawn. Higher values retain only the most consistent word pairs. Default 2 means both words appear together in at least 2 definitions.">?</span>
+        </label>
+        <input id="wordThreshold" type="number" min="1" max="50" step="1" value="2" oninput="renderWordLevel()" />
+      </div>
+      <div>
+        <label for="wordMaxNodes" style="display:flex;align-items:center;gap:.3rem;">
+          Maximum words in network
+          <span class="help-tip" data-tip="The N most frequent words (after stopword removal and lemmatisation) to include as nodes. Only co-occurrences between these top-N words are drawn. Lower values give a sparser, more readable graph; higher values reveal rarer word pairs.">?</span>
+        </label>
+        <input id="wordMaxNodes" type="number" min="10" max="150" step="5" value="60" oninput="renderWordLevel()" />
+      </div>
+    </div>
+
+    <div class="word-level-note">
+      <strong>Interpretation:</strong> Word co-occurrence means two pre-processed words appear together in the same definition. Edge thickness reflects how many definitions contain both words. Node and edge colours reflect the <strong>term-level cluster</strong> the selected term belongs to — enabling visual consistency across the word-level, definition-level, and term-level views. This is a lexical co-occurrence view, not a measure of semantic similarity.
+    </div>
+    <div id="wordClusterLegend" style="display:none;margin:.5rem 2rem;padding:.5rem .75rem;background:#f4f4f0;border-radius:6px;font-size:.78rem;color:#4a5e54;display:flex;align-items:center;gap:.6rem;">
+      <span>Cluster:</span>
+      <span id="wordClusterDot" style="display:inline-block;width:12px;height:12px;border-radius:50%;"></span>
+      <span id="wordClusterName" style="font-weight:600;"></span>
+    </div>
+
+    <div class="smart-link-strip" id="wordSmartLinks">
+      <span class="smart-link-label">Related view</span>
+      <button class="smart-link-btn primary" onclick="goFromWordToDefinitions(event)">Definition-level analysis</button>
+    </div>
+
+    <div class="word-level-layout">
+      <div class="word-visual-card">
+        <div id="wordVisualTitle" class="word-visual-title">Select a term</div>
+        <div id="wordVisual" class="word-visual-box"><div class="definition-loading">Loading word-level data…</div></div>
+      </div>
+      <aside class="word-side-card">
+        <h3>Term summary</h3>
+        <div id="wordSummary" class="word-summary-text">Select a term to inspect word-level patterns.</div>
+        <h3 style="margin-top:1rem;">Top words</h3>
+        <div id="wordTopList" class="word-top-list"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- Definition-Level Analysis: static browser graph -->
+<div class="page" id="page-definitions">
+  <div class="definition-network-page">
+    <div class="definition-network-header">
+      <div>
+        <h1 class="definition-network-title">Definition-Level Network</h1>
+        <p class="definition-network-sub">
+          Explore relationships between definitions of the same term. Definitions are connected by precomputed SBERT sentence-embedding cosine similarity edges. Live multilingual definitions are also connected using SBERT cosine similarity in real time. Node border colour reflects the <strong>term-level cluster</strong> the term belongs to, consistent with the Word-Level and Term-Level views.</p>
+      </div>
+      
+    </div>
+
+    <div class="definition-network-controls">
+      <div>
+        <label for="definitionClusterFilter">Cluster</label>
+        <select id="definitionClusterFilter" onchange="filterDefTermsByCluster()">
+          <option value="">All clusters</option>
+        </select>
+      </div>
+      <div>
+        <label for="definitionTermSelect">Term</label>
+        <select id="definitionTermSelect" onchange="renderDefinitionNetwork();updateDefinitionContribStrip()">
+          <option value="">Select a term…</option>
+        </select>
+      </div>
+      <div>
+        <label for="definitionLangSelect">Language</label>
+        <select id="definitionLangSelect" onchange="renderDefinitionNetwork()">
+          <option value="all">All languages</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="zh-hans">中文简体</option>
+          <option value="zh-hant">中文繁體</option>
+          <option value="zh">Chinese: any script</option>
+        </select>
+      </div>
+      <div>
+        <label for="definitionSourceSelect">Source</label>
+        <select id="definitionSourceSelect" onchange="renderDefinitionNetwork()">
+          <option value="all">All sources</option>
+          <option value="forrt">FORRT / glossary seed</option>
+          <option value="wiktionary">Wiktionary</option>
+          <option value="igi">IGI / publisher dictionary</option>
+          <option value="community">Community submitted</option>
+        </select>
+      </div>
+      <div>
+        <label for="definitionMinSim" style="display:flex;align-items:center;gap:.3rem;">
+          Minimum similarity
+          <span class="help-tip" data-tip="Cosine similarity (0-1). SBERT (Sentence-BERT) encodes each definition as a dense semantic vector. An edge is drawn only if the cosine similarity of two definition vectors meets or exceeds this threshold. Higher values show only the most semantically similar pairs. Recommended: 0.30-0.60 for exploratory use.">?</span>
+        </label>
+        <input id="definitionMinSim" type="number" min="0" max="1" step="0.01" value="0" onchange="renderDefinitionNetwork()" />
+      </div>
+    </div>
+    <div style="background:var(--green-lt);border-radius:var(--radius);padding:.65rem 1rem;margin:.5rem 1.5rem;font-size:.8rem;color:var(--ink-mid);line-height:1.65;">
+      <strong>💡 How to use this view:</strong>
+      Select a term above to load its definition network.
+      Each <strong>node</strong> is one definition — click it to see full text, source, language, and metadata in the panel on the right.
+      Each <strong>edge</strong> connects two definitions whose text has a cosine similarity above the minimum threshold — click an edge to see the similarity score.
+      Node <strong>shape</strong> indicates source: circle = FORRT/community, diamond = Wiktionary, square = IGI.
+      Node <strong>border colour</strong> reflects the term's lexical cluster (consistent with Word-Level and Term-Level views).
+      <strong>⭐ star</strong> prefix means the definition has at least one community annotation.
+      Use <strong>Language</strong> and <strong>Source</strong> filters to focus on a subset. Adjust <strong>Minimum similarity</strong> to show fewer (higher) or more (lower) edges.
+    </div>
+    <div class="smart-link-strip" id="definitionSmartLinks">
+      <span class="smart-link-label">Related view</span>
+      <button class="smart-link-btn primary" onclick="goFromDefinitionsToWords(event)">Word-level analysis</button>
+      <button class="smart-link-btn primary" onclick="goFromDefinitionsToTerms(event)">Term-level analysis</button>
+    </div>
+    <div id="definitionContribStrip" style="display:none;background:var(--green-lt);border-radius:var(--radius);padding:.6rem 1.5rem;margin:.25rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+      <span style="font-size:.8rem;color:var(--ink-mid);flex:1;min-width:200px;">
+        <strong id="definitionContribTermName"></strong> — contribute a definition or annotate an existing one.
+      </span>
+      <button class="smart-link-btn primary" id="btnDefContribEN" onclick="openContribFromDefPage('en')">+ English source</button>
+      <button class="smart-link-btn primary" id="btnDefContribDE" onclick="openContribFromDefPage('de')">+ German source</button>
+      <button class="smart-link-btn primary" id="btnDefContribZH" onclick="openContribFromDefPage('zh-hans')">+ Chinese source</button>
+    </div>
+
+    <div class="definition-network-legend">
+      <span class="definition-pill">★ FORRT / glossary</span>
+      <span class="definition-pill">△ Wiktionary</span>
+      <span class="definition-pill">■ IGI / publisher dictionary</span>
+      <span class="definition-pill">◆ Community submitted</span>
+      <span class="definition-pill good">Green border = source checked</span>
+      <span class="definition-pill warn">Orange border = flagged/source mismatch</span>
+      <span class="definition-pill">⭐ label = annotated/source-checked</span>
+    </div>
+
+    <div class="definition-network-layout">
+      <div id="definitionGraph"><div class="definition-loading">Choose a term to load the definition network.</div></div>
+      <aside class="definition-detail-panel" id="definitionDetailPanel">
+        <h3>Selected definition</h3>
+        <p class="definition-network-note">Click a node to inspect the definition, source metadata, language, annotation counts, and contributor information. Click an edge to compare two connected legacy definitions.</p>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- Term-Level Analysis: static page -->
+<div class="page" id="page-terms">
+  <div class="static-analysis-page term-level-page">
+    <div class="static-analysis-card term-level-card">
+      <div class="term-level-header">
+        <div>
+          <h1 class="static-analysis-title">Term-Level Analysis</h1>
+          <p class="static-analysis-sub">Explore relationships between terms using three static browser-based modes converted from the Shiny app: word co-occurrence, clustering, and types–tokens–TTR.</p>
+        </div>
+        
+      </div>
+
+      <div class="term-mode-tabs" role="tablist" aria-label="Term-level analysis modes">
+        <button class="term-mode-btn active" data-term-mode="cooccurrence" onclick="switchTermMode('cooccurrence')">Word co-occurrence network</button>
+        <button class="term-mode-btn" data-term-mode="clustering" onclick="switchTermMode('clustering')">Clustering graph</button>
+        <button class="term-mode-btn" data-term-mode="typestokens" onclick="switchTermMode('typestokens')">Types–Tokens–TTR</button>
+      </div>
+
+      <div id="termLevelNote" class="term-level-note" style="display:none;"></div>
+
+      <section class="term-mode-panel active" id="termMode-cooccurrence">
+        <div class="term-controls-grid">
+          <label class="term-control-label">Highlight term
+            <select id="termCooccurrenceSelect" class="form-select" onchange="renderTermCooccurrence()"><option value="">Select a term…</option></select>
+          </label>
+          <label class="term-control-label">Minimum co-occurrence
+            <input id="termCooccurrenceThreshold" class="form-input" type="number" min="1" max="100" value="25" oninput="renderTermCooccurrence()" />
+          </label>
+          <label class="term-control-label">Maximum visible edges
+            <input id="termCooccurrenceMaxEdges" class="form-input" type="number" min="50" max="2000" value="500" oninput="renderTermCooccurrence()" />
+          </label>
+        </div>
+        <div class="term-analysis-layout">
+          <div id="termCooccurrenceNetwork" class="term-network-box"><div class="definition-loading">Loading term network…</div></div>
+          <aside class="term-side-panel">
+            <h3>Connected terms</h3>
+            <p class="term-side-help">Select a term to show the strongest word-overlap links. Edge thickness represents the number of shared words across aggregated definitions.</p>
+            <div id="termCooccurrenceTable" class="term-mini-table"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="term-mode-panel" id="termMode-clustering">
+        <div class="term-controls-grid">
+          <label class="term-control-label">Highlight term
+            <select id="termClusterSelect" class="form-select" onchange="renderTermClustering()"><option value="">Select a term…</option></select>
+          </label>
+        </div>
+        <div class="term-analysis-layout">
+          <div id="termClusterPlot" class="term-plot-box"><div class="definition-loading">Loading clustering graph…</div></div>
+          <aside class="term-side-panel">
+            <h3>Closest terms</h3>
+            <p class="term-side-help">This table lists terms with strongest lexical overlap in the static export. Clustering positions are based on lexical overlap between term definitions.</p>
+            <div id="termClosestTable" class="term-mini-table"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="term-mode-panel" id="termMode-typestokens">
+        <div class="term-controls-grid term-controls-grid-3">
+          <label class="term-control-label">Types range
+            <div class="range-pair"><input id="typesMin" class="form-input" type="number" min="0" value="0" oninput="renderTypesTokens()" /><input id="typesMax" class="form-input" type="number" min="0" value="9999" oninput="renderTypesTokens()" /></div>
+          </label>
+          <label class="term-control-label">Tokens range
+            <div class="range-pair"><input id="tokensMin" class="form-input" type="number" min="0" value="0" oninput="renderTypesTokens()" /><input id="tokensMax" class="form-input" type="number" min="0" value="99999" oninput="renderTypesTokens()" /></div>
+          </label>
+          <label class="term-control-label">TTR range
+            <div class="range-pair"><input id="ttrMin" class="form-input" type="number" min="0" max="1" step="0.01" value="0" oninput="renderTypesTokens()" /><input id="ttrMax" class="form-input" type="number" min="0" max="1" step="0.01" value="1" oninput="renderTypesTokens()" /></div>
+          </label>
+        </div>
+        <div class="term-analysis-layout">
+          <div id="typesTokensPlot" class="term-plot-box"><div class="definition-loading">Loading types–tokens graph…</div></div>
+          <aside class="term-side-panel">
+            <h3>Filtered terms</h3>
+            <p class="term-side-help">Each point is one term. X = tokens, Y = types, Z = type-to-token ratio.</p>
+            <div id="typesTokensTable" class="term-mini-table"></div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Contributors / Community Dashboard -->
+<div class="page" id="page-leaderboard">
+  <div class="page-content" style="max-width:1180px;">
+    <h1 class="page-title">Community Dashboard</h1>
+    <p class="page-sub">A live overview of contributor activity, submitted definitions, annotations, multilingual coverage, and public contributor profiles.</p>
+
+    <div class="leaderboard-note">
+      <strong>Contribution score:</strong> 3 × submitted definitions + 2 × annotations. The score is only a navigation aid; contributor cards and activity records provide the transparent scholarly record.
+    </div>
+
+    <div class="leaderboard-summary" id="leaderboardSummary">
+      <div class="leaderboard-stat"><div class="leaderboard-stat-num">—</div><div class="leaderboard-stat-label">Contributors</div></div>
+      <div class="leaderboard-stat"><div class="leaderboard-stat-num">—</div><div class="leaderboard-stat-label">Definitions submitted</div></div>
+      <div class="leaderboard-stat"><div class="leaderboard-stat-num">—</div><div class="leaderboard-stat-label">Annotations</div></div>
+      <div class="leaderboard-stat"><div class="leaderboard-stat-num">—</div><div class="leaderboard-stat-label">Languages covered</div></div>
+    </div>
+
+    <div class="community-tabs">
+      <button class="community-tab-btn active" onclick="switchCommunityView('leaderboard')">Top contributors</button>
+      <button class="community-tab-btn" onclick="switchCommunityView('recent')">Recent activity</button>
+      <button class="community-tab-btn" onclick="switchCommunityView('coverage')">Language coverage</button>
+      <button class="community-tab-btn" onclick="switchCommunityView('cards')">Contributor cards</button>
+      <button class="community-tab-btn" onclick="switchCommunityView('hall')">Hall of fame</button>
+    </div>
+
+    <div class="leaderboard-controls">
+      <input id="leaderboardSearch" type="search" placeholder="Search contributors, terms, ORCID…" oninput="renderCommunityDashboard()" />
+      <select id="leaderboardTimeRange" onchange="renderCommunityDashboard()">
+        <option value="month">This month</option>
+        <option value="90">Last 3 months</option>
+        <option value="180">Last 6 months</option>
+        <option value="365">Past year</option>
+        <option value="all">All time</option>
+      </select>
+      <select id="leaderboardLanguage" onchange="renderCommunityDashboard()">
+        <option value="all">All languages</option>
+        <option value="en">English</option>
+        <option value="de">German</option>
+        <option value="zh">Chinese</option>
+        <option value="other">Other languages</option>
+      </select>
+      <select id="leaderboardSort" onchange="renderCommunityDashboard()">
+        <option value="score">Most active</option>
+        <option value="definitions">Most definitions</option>
+        <option value="annotations">Most annotations</option>
+        <option value="languages">Most languages</option>
+        <option value="terms">Most terms covered</option>
+        <option value="recent">Most recent activity</option>
+        <option value="name">Name A → Z</option>
+      </select>
+    </div>
+
+    <div id="communityLoading"><div class="loading"><div class="loading-spinner"></div>Loading community dashboard…</div></div>
+
+    <div class="community-view active" id="community-view-leaderboard">
+      <div id="leaderboardContent"></div>
+    </div>
+
+    <div class="community-view" id="community-view-recent">
+      <div id="communityRecentActivity"></div>
+    </div>
+
+    <div class="community-view" id="community-view-coverage">
+      <div id="communityLanguageCoverage"></div>
+    </div>
+
+    <div class="community-view" id="community-view-cards">
+      <div id="communityContributorCards"></div>
+    </div>
+
+    <div class="community-view" id="community-view-hall">
+      <div id="communityHallOfFame"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Dataset -->
+<div class="page" id="page-dataset">
+  <div style="max-width:1200px;margin:1.25rem auto 0;padding:0 2rem .75rem;display:flex;align-items:center;gap:.6rem;background:var(--green-lt);border-radius:var(--radius);border:1px solid var(--border);">
+    <span style="font-size:1.1rem;">💡</span>
+    <p style="font-size:.82rem;color:var(--ink-mid);margin:0;">
+      <strong>How to use:</strong> Search or filter terms using the controls below.
+      <strong>Click any term card</strong> to open a panel showing all available definitions across sources — including FORRT, Wiktionary, and community contributions.
+      Use <strong>+ Contribute</strong> to submit a new definition for that term.
+    </p>
+  </div>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" id="searchInput" type="search" placeholder="Search terms…" oninput="filterTerms()" />
+    </div>
+    <select class="filter-select" id="langFilter" onchange="filterTerms()">
+      <option value="">All languages</option>
+      <option value="missing-de">Missing German</option>
+      <option value="missing-zh">Missing Chinese</option>
+      <option value="has-community">Has community definitions</option>
+    </select>
+    <select class="filter-select" id="sortFilter" onchange="filterTerms()">
+      <option value="alpha">A → Z</option>
+      <option value="defs-desc">Most definitions</option>
+      <option value="defs-asc">Fewest definitions</option>
+    </select>
+    <span class="results-count" id="resultsCount"></span>
+  </div>
+  <div class="new-term-banner">
+    <div class="new-term-banner-inner">
+      <div><strong>Can’t find a term?</strong> Suggest a new term and submit its first source-based definition.</div>
+      <button class="new-term-btn" onclick="openNewTermContrib(event)">+ Suggest new term + definition</button>
+    </div>
+  </div>
+  <div class="term-grid" id="termGrid"><div class="loading"><div class="loading-spinner"></div>Loading terms…</div></div>
+</div>
+
+<!-- Videos: static page -->
+<div class="page" id="page-videos">
+
+  <div class="static-analysis-page">
+
+    <div class="static-analysis-card">
+
+      <h1 class="static-analysis-title">Video Tutorials</h1>
+
+      <p class="static-analysis-sub">
+        Learn how to explore the Re-SearchTerms database, compare definitions,
+        contribute new definitions, annotate existing entries, and participate
+        in the community project.
+      </p>
+
+      <!-- Featured introductory video -->
+
+      <h2 style="margin-bottom:12px;">
+        Getting Started with Re-SearchTerms
+      </h2>
+
+      <div style="
+        position:relative;
+        width:100%;
+        padding-bottom:56.25%;
+        margin-bottom:24px;
+        border-radius:12px;
+        overflow:hidden;
+        box-shadow:var(--shadow-md);
+      ">
+        <iframe
+          src="https://www.youtube.com/embed/_fueLK6ROpw"
+          title="Getting Started with Re-SearchTerms"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          style="
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            border:none;
+          ">
+        </iframe>
+      </div>
+
+      <p style="margin-bottom:24px;color:var(--ink-mid);">
+        New to the project? Start with this introductory video before exploring
+        the dataset and contributing definitions.
+      </p>
+
+      <hr style="margin:32px 0;border:none;border-top:1px solid var(--border);">
+
+      <!-- Full playlist -->
+
+      <h2 style="margin-bottom:12px;">
+        Full Tutorial Playlist
+      </h2>
+
+      <div style="
+        position:relative;
+        width:100%;
+        padding-bottom:56.25%;
+        border-radius:12px;
+        overflow:hidden;
+        box-shadow:var(--shadow-md);
+      ">
+        <iframe
+          src="https://www.youtube.com/embed/videoseries?list=PLSLpkUCilSvrPyKLTgc8KWtMx7tPiiLVp"
+          title="Re-SearchTerms Tutorial Playlist"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          style="
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            border:none;
+          ">
+        </iframe>
+      </div>
+
+      <div style="margin-top:24px;">
+
+        <h3>Planned Tutorials</h3>
+
+        <ul class="static-analysis-list">
+          <li>Searching and comparing definitions</li>
+          <li>Submitting a new definition</li>
+          <li>Annotating an existing definition</li>
+          <li>Suggesting a new term</li>
+          <li>Understanding term networks</li>
+          <li>Understanding definition networks</li>
+          <li>Using the contributor dashboard</li>
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- About -->
+<div class="page" id="page-about">
+  <div class="about-content">
+    <h1 class="about-title">About <i>Re-SearchTerms</i></h1>
+    <p class="about-body"><i>Re-SearchTerms</i> is an interactive platform designed for exploring how research terms in open scholarship, metascience, and research practice are defined across different sources.</p>
+    <p class="about-body">The platform enables you to compare definitions, examine relationships between terms and definitions, and analyse patterns in the language used to describe core concepts in research.</p>
+    <h2 class="about-heading">From a Research Tool to a Living Platform</h2>
+    <p class="about-body"><i>Re-SearchTerms</i> was originally developed as part of the doctoral dissertation of Anna Yi Leung, which examined conceptual variability and terminological ambiguity in open scholarship and psychological science.</p>
+    <p class="about-body">The current version represents an expanded and evolving platform that builds on this initial work. It integrates a set of larger, more diverse, and multilingual definitions. It also introduces new analytical features (e.g., word-level, definition-level, and embedding-based analyses), and improves the interactivity and accessibility of the original application.</p>
+    <p class="about-body">Rather than a static resource, <i>Re-SearchTerms</i> is being developed as a living and expanding terminology platform that encourages the community to contribute to data curation and feature design that benefits open education. The project goal is to support continuous reflection, discussion, and refinement of how key research concepts are defined and used across disciplines.</p>
+    <h2 class="about-heading">Collaboration with FORRT</h2>
+    <p class="about-body"><i>Re-SearchTerms</i> is currently developed in collaboration with the Framework for Open and Reproducible Research Training (FORRT).</p>
+    <p class="about-body">This app incorporates terminology curated by FORRT (the FORRT Glossary) alongside other sources (e.g., Wiktionary and academic publications), enabling users to explore how definitions vary across communities and contexts.</p>
+    <p class="about-body">Ongoing development aims to further expand the dataset, introduce new features, and support community contributions, making the platform a shared resource for researchers, educators, and practitioners. We are currently recruiting community contributors to submit new definitions to expand our dataset, as well as to annotate existing definitions to provide further contextual information for research, teaching, and learning. We are also recruiting pedagogical evaluators to provide feedback on the platform's features for facilitating its pedagogical utility. We welcome researchers and students of all levels across the globe to join our Slack channel on FORRT (#re-searchterms) to get our project's latest news, and sign up as a contributor!</p>
+    <h2 class="about-heading">Citation</h2>
+    <p class="about-body">The conceptualisation and development of the initial form of <i>Re-SearchTerms</i> has been reported and published in <em>Meta-Psychology</em> If you use <i>Re-SearchTerms</i> in any form, please cite our paper:</p>
+    <div class="about-citation">Anna Yi Leung, Daniel Kristanto, &amp; Xenia Schmalz. (2026, accepted). <a href="https://osf.io/preprints/osf/qsp7x_v2" target="_blank" rel="noopener">Re-SearchTerms: A Shiny app for exploring terminology variations in psychology and metascience</a>. <em>Meta-Psychology</em>.</div>
+    <h2 class="about-heading">Project Personnel</h2>
+    <div class="about-personnel">
+      <div class="personnel-row"><span class="personnel-role">Project Lead</span><span class="personnel-name"><a href="https://annayileung.com/" target="_blank" rel="noopener">Anna Yi Leung</a> — Ludwig-Maximilians-University of Munich, Germany</span></div>
+      <div class="personnel-row"><span class="personnel-role">Co-Project Lead</span><span class="personnel-name"><a href="https://uol.de/psychologie/statistik/daniel-kristanto" target="_blank" rel="noopener">Dr. Daniel Kristanto</a> — Carl von Ossietzky Universität Oldenburg, Germany</span></div>
+    </div>
+    <p class="about-body" style="margin-top:.75rem;font-size:.85rem;color:var(--ink-lt)">Our project is open to collaboration, and additional contributors may be acknowledged as the platform evolves. If you have any project ideas, or if we could support your current projects in any way, please feel free to reach out to us.</p>
+    <h2 class="about-heading">Acknowledgements</h2>
+    <p class="about-body">The initial development of <i>Re-SearchTerms</i> was supported by the <a href="https://www.lmu.de/psy/de/forschung/meta-rep/" target="_blank" rel="noopener">META-REP Priority Programme</a> and the German Research Foundation (DFG). We thank Dr. Xenia Schmalz for her contributions to the initial version of the app. The current version represents an independent, expanded development. We thank Dr. Flavio Azevedo (Director of FORRT) and Dr. Lukas Wallrich (Co-Chair of FORRT) for their technical feedback and for supporting the integration of the project within FORRT.</p>
+  </div>
+</div>
+
+<!-- Term panel -->
+<div class="panel-backdrop" id="panelBackdrop" onclick="closePanel(event)">
+  <div class="panel" id="termPanel">
+    <button class="panel-close" onclick="closePanel()">×</button>
+    <div id="panelContent"></div>
+  </div>
+</div>
+
+<!-- Login modal -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close-x" onclick="closeModal()">×</button>
+    <h2 id="modalTitle">Welcome back</h2>
+    <p class="modal-sub" id="modalSub">Log in to contribute definitions and annotate terms.</p>
+    <div class="modal-tabs" id="modalTabs">
+      <button class="modal-tab active" onclick="switchTab('login')">Log in</button>
+    </div>
+    <div id="formLogin">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="loginEmail" type="email" placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="loginPassword" type="password" placeholder="••••••••" />
+      </div>
+      <div id="loginMsg"></div>
+      <button class="btn-primary" id="btnLogin" onclick="doLogin()">Log in</button>
+      <p style="text-align:center;margin-top:.75rem;font-size:.8rem;color:var(--ink-lt);">
+        <a href="#" onclick="showForgotPassword(event)" style="color:var(--green-mid);text-decoration:underline;">Forgot password?</a>
+      </p>
+      <div style="margin-top:1.25rem;padding:1rem;background:var(--green-lt);border-radius:var(--radius);text-align:center;">
+        <p style="font-size:.8rem;color:var(--ink-mid);margin-bottom:.5rem;">
+          Don't have an account yet?
+        </p>
+        <button onclick="closeModal();openTallyModal();"
+          style="background:var(--green-dark);color:#fff;border:none;font-size:.8rem;font-weight:600;
+                 padding:.45rem 1.1rem;border-radius:5px;cursor:pointer;transition:var(--transition);">
+          Apply to contribute →
+        </button>
+      </div>
+    </div>
+    <div id="formForgot" style="display:none;">
+      <p style="font-size:.85rem;color:var(--ink-mid);margin-bottom:1rem;">Enter your email and we'll send a reset link.</p>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="forgotEmail" type="email" placeholder="you@institution.edu" />
+      </div>
+      <div id="forgotMsg"></div>
+      <button class="btn-primary" id="btnForgot" onclick="doForgotPassword()">Send reset link</button>
+      <p style="text-align:center;margin-top:.75rem;font-size:.8rem;">
+        <a href="#" onclick="showLoginForm(event)" style="color:var(--green-mid);text-decoration:underline;">← Back to login</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Tally fullscreen overlay ──────────────────────────────── -->
+<div id="tallyBackdrop" style="
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #fff;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+">
+  <!-- Thin top bar -->
+  <div style="
+    background: var(--green-dark);
+    padding: .6rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  ">
+    <div style="display:flex;align-items:center;gap:.75rem;">
+      <img src="forrt_logo_inverted.png" alt="FORRT" style="height:22px;opacity:.9;" />
+      <div>
+        <span style="color:#fff;font-weight:700;font-size:.875rem;">Apply to contribute</span>
+        <span style="color:rgba(255,255,255,.55);font-size:.72rem;margin-left:.75rem;">We review all applications before granting access</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="#" onclick="closeTallyModal();openModal('login');return false;"
+         style="color:rgba(255,255,255,.7);font-size:.75rem;text-decoration:underline;">
+        Already have an account? Log in
+      </a>
+      <button onclick="closeTallyModal()" style="
+        background: rgba(255,255,255,.15);
+        border: none;
+        color: #fff;
+        font-size: .8rem;
+        font-weight: 600;
+        padding: .3rem .8rem;
+        border-radius: 5px;
+        cursor: pointer;
+      ">✕ Close</button>
+    </div>
+  </div>
+  <!-- Full-height Tally iframe -->
+  <div style="flex:1;overflow-y:auto;display:flex;justify-content:center;background:#fafaf8;">
+    <div style="width:100%;max-width:760px;padding:0 2rem;">
+      <iframe
+        id="tallyIframe"
+        src="https://tally.so/embed/1Aprvg?hideTitle=0&transparentBackground=1"
+        width="100%"
+        height="5000"
+        frameborder="0"
+        scrolling="no"
+        style="border:none;display:block;overflow:hidden;"
+        title="Join the Re-SearchTerms Contributor Community">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Contribution modal -->
+<div class="modal-backdrop" id="contribBackdrop" onclick="closeContribOutside(event)">
+  <div class="modal" style="width:min(820px,96vw);max-height:92vh;overflow-y:auto;">
+    <button class="modal-close-x" onclick="closeContrib()">×</button>
+
+    <div id="contribModeSubmit">
+      <h2 id="contribTitle">Contribute a definition</h2>
+      <p class="modal-sub" id="contribSubtitle">
+        Submit a definition from a verifiable source. Please preserve the source wording and include citations that appear inside the definition.
+      </p>
+
+      <div class="helper-box">
+        <strong>Submission principle:</strong> <i>Re-SearchTerms</i> collects source-based definitions, not contributor-made definitions. DOI/URL is useful when available, but books, textbooks, dictionaries, slides, teaching materials, and other sources are welcome if you provide a full citation and a precise page, section, slide, or entry location.
+      </div>
+
+      <!-- Section 0: New term information -->
+      <div id="newTermFields" style="display:none;">
+        <div class="form-section-title">0. New term proposal</div>
+        <div class="helper-box">
+          <strong>New term principle:</strong> A new term must be submitted together with at least one definition from a verifiable source. The project team may approve it as a new term, merge it with an existing term, or ask for revision.
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Proposed new term name <span style="color:#c0392b">*</span></label>
+            <input class="form-input" id="newTermName" type="text" placeholder="e.g. Research parasite" oninput="syncNewTermName()" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language of proposed term <span style="color:#c0392b">*</span></label>
+            <select class="form-select" id="newTermLanguage">
+              <option value="en">English</option>
+              <option value="de">Deutsch / German</option>
+              <option value="zh-hans">中文（简/繁） / Chinese</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Alternative labels / synonyms</label>
+          <input class="form-input" id="newTermSynonyms" type="text" placeholder="e.g. Scientific impact; scholarly impact; research impact" />
+          <p class="form-hint">Use semicolons to separate multiple labels. This helps capture jingle–jangle cases and possible merge decisions.</p>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Related existing term, if any</label>
+            <input class="form-input" id="newTermRelatedExisting" type="text" placeholder="e.g. Academic impact; not sure" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reason for suggesting this term</label>
+            <input class="form-input" id="newTermReason" type="text" placeholder="e.g. The term appears in recent literature but is not yet in the database." />
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: Definition information -->
+      <div class="form-section-title">1. Definition information</div>
+
+      <div class="form-group">
+        <label class="form-label">Term being defined <span style="color:#c0392b">*</span></label>
+        <input class="form-input" id="contribTerm" type="text" readonly style="background:#f4f4f0;cursor:default;" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Term label or synonym used by the source</label>
+        <input class="form-input" id="sourceTermLabel" type="text" placeholder="e.g. scientific impact, if the selected database term is academic impact" />
+        <p class="form-hint" id="sourceTermLabelHint">Use this to capture jingle-jangle cases: the source may define the same or a closely related concept using a different label.</p>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Language of submitted definition <span style="color:#c0392b">*</span></label>
+          <select class="form-select" id="contribLang" onchange="updateContribLanguageHelpers()">
+            <option value="en">English</option>
+            <option value="de">Deutsch / German</option>
+            <option value="zh-hans">中文（简/繁） / Chinese</option>
+             <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Definition wording type <span style="color:#c0392b">*</span></label>
+          <select class="form-select" id="definitionType" onchange="updateTranslationFields()">
+            <option value="exact_source_wording">Exact wording as it appears in the source</option>
+            <option value="source_provided_translation">Translation provided by the source itself</option>
+            <option value="contributor_translation_of_source">Contributor translation of a source definition</option>
+          </select>
+          <p class="form-hint" id="definitionTypeHint">Please DO NOT provide a self-synthesised or paraphrased definition. If you translate it yourself, please also provide the original source wording below.</p>
+        </div>
+      </div>
+
+      <div id="translationFields" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Original source wording <span id="originalWordingRequired" style="color:#c0392b;display:none;">*</span></label>
+          <textarea class="form-input" id="originalSourceWording" rows="3" placeholder="Paste the definition in the original language as it appears in the source." style="resize:vertical;line-height:1.6;"></textarea>
+          <p class="form-hint" id="originalSourceWordingHint">Required if you submit your own translation. This helps bilingual validators compare your translation with the source text.</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Definition text <span style="color:#c0392b">*</span></label>
+        <textarea class="form-input" id="contribText" rows="5" placeholder="Paste the definition. Keep in-text citations such as (Smith, 2014) if they appear in the source definition." style="resize:vertical;line-height:1.6;"></textarea>
+        <div class="inline-help" id="definitionTextHelp"><strong>Important:</strong> Include citations that appear inside the definition, for example “Open science refers to … (Fecher & Friesike, 2014).” Do not remove parenthetical citations because they are useful for provenance and future citation-network analyses.</div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Where can another person find this definition? <span style="color:#c0392b">*</span></label>
+          <select class="form-select" id="sourceLocationType">
+            <option value="">Select...</option>
+            <option value="page">Page number(s)</option>
+            <option value="section">Named section</option>
+            <option value="chapter">Chapter</option>
+            <option value="slide">Slide number</option>
+            <option value="glossary_entry">Glossary entry</option>
+            <option value="dictionary_entry">Dictionary entry</option>
+            <option value="appendix">Appendix</option>
+            <option value="paragraph">Paragraph number</option>
+            <option value="table_or_figure">Table or figure</option>
+            <option value="other">Other locator</option>
+          </select>
+          <p class="form-hint" id="sourceLocationTypeHint">This is not the source type. It tells validators where inside the source the definition appears.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Exact page / section / slide / entry <span style="color:#c0392b">*</span></label>
+          <input class="form-input" id="sourceLocation" type="text" placeholder="e.g. p. 35; Section 2.1; Slide 18; Entry: Open Science" />
+        </div>
+      </div>
+
+      <!-- Section 2: Source information -->
+      <div class="form-section-title">2. Source information</div>
+
+      <div class="form-group">
+        <label class="form-label">Source type <span style="color:#c0392b">*</span></label>
+        <select class="form-select" id="contribSourceType" onchange="updateSourceTypeHint()">
+          <option value="journal_article">Journal article</option>
+          <option value="book">Book</option>
+          <option value="book_chapter">Book chapter</option>
+          <option value="textbook">Textbook</option>
+          <option value="dictionary">Dictionary</option>
+          <option value="glossary">Glossary</option>
+          <option value="website">Website</option>
+          <option value="report">Report</option>
+          <option value="policy_document">Policy document</option>
+          <option value="conference_paper">Conference paper</option>
+          <option value="slides">Lecture / workshop slides</option>
+          <option value="teaching_material">Teaching material</option>
+          <option value="other">Other</option>
+        </select>
+        <p class="form-hint" id="sourceTypeHint">Journal articles usually have a DOI. Books usually have an ISBN. Slides may only have presenter, institution, year, and slide number.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Full citation <span style="color:#c0392b">*</span></label>
+        <textarea class="form-input" id="fullCitation" rows="3" placeholder="Paste or type the full citation as completely as possible." style="resize:vertical;line-height:1.6;"></textarea>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Author(s) of the current source <span style="color:#c0392b">*</span></label>
+          <input class="form-input" id="citAuthor" type="text" placeholder="Surname, Initials.; Surname, Initials. e.g. Smith, J.; Jones, A. B." />
+          <p class="form-hint" id="authorFormatHint">Preferred format: Surname, Initials.; separate multiple authors with semicolons. If unsure, paste the author list as shown by the source.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year <span style="color:#c0392b">*</span></label>
+          <input class="form-input" id="citYear" type="number" placeholder="2024" min="1500" max="2100" />
+        </div>
+      </div>
+
+      <div style="background:var(--green-lt);border-radius:var(--radius);padding:.75rem 1rem;margin-bottom:.75rem;">
+        <div style="font-size:.75rem;font-weight:700;color:var(--green-dark);margin-bottom:.5rem;">💡 Have a DOI? Enter it first — we'll auto-fill what we can.</div>
+        <div class="form-grid-3">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">DOI</label>
+            <div style="display:flex;gap:.4rem;align-items:center;">
+              <input class="form-input" id="citDoi" type="text" placeholder="10.xxxx/xxxxx" oninput="resetDoiVerify()" />
+              <button type="button" onclick="verifyAndAutofillDoi()" id="btnVerifyDoi" style="flex-shrink:0;padding:.6rem .75rem;background:var(--green-dark);color:#fff;border:none;border-radius:var(--radius);font-size:.72rem;font-weight:600;cursor:pointer;">Check &amp; fill</button>
+            </div>
+            <div id="doiStatus" style="font-size:.75rem;margin-top:.3rem;"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">ISBN</label>
+            <input class="form-input" id="citIsbn" type="text" placeholder="For books/textbooks" />
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">URL</label>
+            <input class="form-input" id="citUrl" type="url" placeholder="https://..." />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Title of current source <span style="color:#c0392b">*</span></label>
+        <input class="form-input" id="citTitle" type="text" placeholder="e.g. Open Science: A Practical Guide" />
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Publication outlet / publisher / organisation</label>
+          <input class="form-input" id="publicationOutlet" type="text" placeholder="Journal, publisher, institution, website, organisation..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Access date <span style="color:var(--ink-lt)">(for websites/slides)</span></label>
+          <input class="form-input" id="accessDate" type="date" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Source accessibility <span style="color:#c0392b">*</span></label>
+        <select class="form-select" id="sourceAccessibility">
+          <option value="">Select...</option>
+          <option value="open_access">Open access</option>
+          <option value="institutional_access">Institutional access required</option>
+          <option value="physical_copy">Physical copy only</option>
+          <option value="personal_copy">Personal copy</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+
+      <!-- Section 3: Provenance -->
+      <div class="form-section-title">3. Definition provenance</div>
+
+      <div class="form-group">
+        <label class="form-label">How does the current source present this definition? <span style="color:#c0392b">*</span></label>
+        <select class="form-select" id="definitionProvenance" onchange="updateProvenanceFields()">
+          <option value="">Select...</option>
+          <option value="original_to_current_source">The current source appears to propose this definition itself</option>
+          <option value="direct_quote_from_cited_source">The current source directly quotes an earlier cited source</option>
+          <option value="adapted_from_cited_source">The current source adapts or paraphrases an earlier cited source</option>
+          <option value="synthesises_multiple_cited_sources">The current source combines or summarises multiple earlier cited sources</option>
+          <option value="provenance_unclear">Unclear / no explicit provenance given</option>
+        </select>
+        <div class="inline-help">Only list earlier sources that are cited by the current source in relation to the definition. Do not add sources merely because you personally think they are relevant.</div>
+      </div>
+
+      <div id="originalSourceFields" style="display:none;">
+        <div class="helper-box">
+          Add every earlier cited source that the current source uses for this definition. This supports definition genealogy and citation-network analysis.
+        </div>
+        <div id="originalSourcesContainer">
+          <div class="original-source-item" data-source-index="1">
+            <div style="font-size:.75rem;font-weight:700;color:var(--green-dark);margin-bottom:.55rem;">Earlier cited source 1</div>
+            <div class="form-grid-2">
+              <div class="form-group"><label class="form-label">Original source author(s)</label><input class="form-input orig-author" type="text" placeholder="Surname, Initials.; Surname, Initials." /></div>
+              <div class="form-group"><label class="form-label">Original source year</label><input class="form-input orig-year" type="number" placeholder="2014" min="1500" max="2100" /></div>
+            </div>
+            <div class="form-group"><label class="form-label">Original source title</label><input class="form-input orig-title" type="text" placeholder="Title of the source cited by the current source" /></div>
+            <div class="form-grid-3">
+              <div class="form-group"><label class="form-label">Original DOI</label><input class="form-input orig-doi" type="text" placeholder="10.xxxx/xxxxx" /></div>
+              <div class="form-group"><label class="form-label">Original ISBN</label><input class="form-input orig-isbn" type="text" /></div>
+              <div class="form-group"><label class="form-label">Original URL</label><input class="form-input orig-url" type="url" placeholder="https://..." /></div>
+            </div>
+            <div class="form-group"><label class="form-label">How is this earlier source used?</label><select class="form-select orig-relation"><option value="cited_as_definition_source">Cited as definition source</option><option value="directly_quoted">Directly quoted</option><option value="adapted_or_paraphrased">Adapted or paraphrased</option><option value="one_of_multiple_sources">One of multiple sources</option><option value="unclear">Unclear</option></select></div>
+            <label class="check-row"><input type="checkbox" class="orig-verified" /> I personally checked this original cited source.</label>
+          </div>
+        </div>
+        <button type="button" class="add-row-btn" onclick="addOriginalSource()">+ Add another cited source</button>
+      </div>
+
+      <!-- Section 4: Conceptual context -->
+      <div class="form-section-title">4. Conceptual context and annotation</div>
+
+      <div class="form-group">
+        <label class="form-label" id="annoDisciplineLabel">Discipline(s)</label>
+        <div id="disciplineTags" class="tag-wrap">
+          <label class="tag-toggle"><input type="checkbox" value="psychology"> Psychology</label>
+          <label class="tag-toggle"><input type="checkbox" value="medicine"> Medicine</label>
+          <label class="tag-toggle"><input type="checkbox" value="education"> Education</label>
+          <label class="tag-toggle"><input type="checkbox" value="linguistics"> Linguistics</label>
+          <label class="tag-toggle"><input type="checkbox" value="neuroscience"> Neuroscience</label>
+          <label class="tag-toggle"><input type="checkbox" value="philosophy"> Philosophy</label>
+          <label class="tag-toggle"><input type="checkbox" value="statistics"> Statistics</label>
+          <label class="tag-toggle"><input type="checkbox" value="computer_science"> Computer Science</label>
+          <label class="tag-toggle"><input type="checkbox" value="engineering"> Engineering</label>
+          <label class="tag-toggle"><input type="checkbox" value="library_information_science"> Library & Information Science</label>
+          <label class="tag-toggle"><input type="checkbox" value="sociology"> Sociology</label>
+          <label class="tag-toggle"><input type="checkbox" value="political_science"> Political Science</label>
+          <label class="tag-toggle"><input type="checkbox" value="economics_business"> Economics / Business</label>
+          <label class="tag-toggle"><input type="checkbox" value="communication_media"> Communication / Media Studies</label>
+          <label class="tag-toggle"><input type="checkbox" value="law"> Law / Legal Studies</label>
+          <label class="tag-toggle"><input type="checkbox" value="humanities"> Humanities</label>
+          <label class="tag-toggle"><input type="checkbox" value="environmental_science"> Environmental Science</label>
+          <label class="tag-toggle"><input type="checkbox" value="interdisciplinary"> Interdisciplinary</label>
+          <label class="tag-toggle"><input type="checkbox" value="other"> Other</label>
+        </div>
+        <input class="form-input" id="disciplineOther" type="text" placeholder="If Other, please specify" style="margin-top:.55rem;" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" id="annoResearchContextLabel">Research context(s)</label>
+        <div id="researchContextTags" class="tag-wrap">
+          <label class="tag-toggle"><input type="checkbox" value="open_science"> Open Science</label>
+          <label class="tag-toggle"><input type="checkbox" value="research_methods"> Research Methods</label>
+          <label class="tag-toggle"><input type="checkbox" value="statistics"> Statistics</label>
+          <label class="tag-toggle"><input type="checkbox" value="measurement"> Measurement</label>
+          <label class="tag-toggle"><input type="checkbox" value="theory_development"> Theory Development</label>
+          <label class="tag-toggle"><input type="checkbox" value="research_design"> Research Design</label>
+          <label class="tag-toggle"><input type="checkbox" value="meta_research"> Meta-research</label>
+          <label class="tag-toggle"><input type="checkbox" value="education"> Education</label>
+          <label class="tag-toggle"><input type="checkbox" value="scientific_communication"> Scientific Communication</label>
+          <label class="tag-toggle"><input type="checkbox" value="research_ethics"> Research Ethics</label>
+          <label class="tag-toggle"><input type="checkbox" value="clinical_practice"> Clinical Practice</label>
+          <label class="tag-toggle"><input type="checkbox" value="policy"> Policy</label>
+          <label class="tag-toggle"><input type="checkbox" value="technology_innovation"> Technology / Innovation</label>
+          <label class="tag-toggle"><input type="checkbox" value="impact_assessment"> Impact Assessment</label>
+          <label class="tag-toggle"><input type="checkbox" value="knowledge_translation"> Knowledge Translation</label>
+          <label class="tag-toggle"><input type="checkbox" value="other"> Other</label>
+        </div>
+        <input class="form-input" id="researchContextOther" type="text" placeholder="If Other, please specify" style="margin-top:.55rem;" />
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Definition framing / style</label>
+          <select class="form-select" id="definitionStyle">
+            <option value="">Not sure / skip</option>
+            <option value="theoretical">Theoretical — explains what the concept means</option>
+            <option value="operational">Operational — specifies how the concept is measured or identified</option>
+            <option value="normative">Normative — states what should be done or valued</option>
+            <option value="descriptive">Descriptive — describes common usage or features</option>
+            <option value="procedural">Procedural — describes steps, practices, or processes</option>
+            <option value="educational">Educational — written for teaching or learning</option>
+            <option value="policy_oriented">Policy-oriented — written for governance, regulation, or institutional use</option>
+            <option value="other">Other</option>
+          </select>
+          <p class="form-hint">Please refer to our contributor handbook for explanations for these categories.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Scope of definition</label>
+          <select class="form-select" id="definitionScope">
+            <option value="">Not sure / skip</option>
+            <option value="very_broad">Very broad</option>
+            <option value="broad">Broad</option>
+            <option value="moderate">Moderate</option>
+            <option value="narrow">Narrow</option>
+            <option value="very_narrow">Very narrow</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Why might someone choose this definition?</label>
+        <textarea class="form-input" id="contributorNote" rows="3" placeholder="e.g. Useful when discussing transparency in quantitative psychology, but perhaps too narrow for interdisciplinary work." style="resize:vertical;line-height:1.6;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Community tags</label>
+        <div id="selfTags" class="tag-wrap">
+          <label class="tag-toggle"><input type="checkbox" value="discipline-specific"> Discipline-specific</label>
+          <label class="tag-toggle"><input type="checkbox" value="contested"> Contested</label>
+          <label class="tag-toggle"><input type="checkbox" value="emerging-concept"> Emerging concept</label>
+          <label class="tag-toggle"><input type="checkbox" value="historical"> Historical</label>
+          <label class="tag-toggle"><input type="checkbox" value="outdated"> Outdated</label>
+          <label class="tag-toggle"><input type="checkbox" value="ambiguous"> Ambiguous</label>
+          <label class="tag-toggle"><input type="checkbox" value="jargon-heavy"> Jargon-heavy</label>
+          <label class="tag-toggle"><input type="checkbox" value="accessible-to-non-experts"> Accessible to non-experts</label>
+          <label class="tag-toggle"><input type="checkbox" value="overly-broad"> Overly broad</label>
+          <label class="tag-toggle"><input type="checkbox" value="overly-narrow"> Overly narrow</label>
+          <label class="tag-toggle"><input type="checkbox" value="frequently-used"> Frequently used</label>
+          <label class="tag-toggle"><input type="checkbox" value="rarely-used"> Rarely used</label>
+          <label class="tag-toggle"><input type="checkbox" value="normative"> Normative</label>
+          <label class="tag-toggle"><input type="checkbox" value="value-laden"> Value-laden</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Suitable context(s)</label>
+        <div id="suitableContextTags" class="tag-wrap">
+          <label class="tag-toggle"><input type="checkbox" value="academic_research"> Academic research</label>
+          <label class="tag-toggle"><input type="checkbox" value="teaching"> Teaching</label>
+          <label class="tag-toggle"><input type="checkbox" value="student_learning"> Student learning</label>
+          <label class="tag-toggle"><input type="checkbox" value="grant_writing"> Grant writing</label>
+          <label class="tag-toggle"><input type="checkbox" value="public_communication"> Public communication</label>
+          <label class="tag-toggle"><input type="checkbox" value="policy"> Policy</label>
+          <label class="tag-toggle"><input type="checkbox" value="clinical_practice"> Clinical practice</label>
+          <label class="tag-toggle"><input type="checkbox" value="industry"> Industry</label>
+          <label class="tag-toggle"><input type="checkbox" value="meta_research"> Meta-research</label>
+        </div>
+      </div>
+
+      <!-- Section 5: Confidence -->
+      <div class="form-section-title">5. Contributor confidence</div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Confidence that the definition was copied/translated accurately <span style="color:#c0392b">*</span></label>
+          <select class="form-select" id="selfConfidence">
+            <option value="">Select...</option>
+            <option value="5">5 — Very confident</option>
+            <option value="4">4 — Confident</option>
+            <option value="3">3 — Moderately confident</option>
+            <option value="2">2 — Somewhat uncertain</option>
+            <option value="1">1 — Uncertain</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confidence that the source metadata are correct <span style="color:#c0392b">*</span></label>
+          <select class="form-select" id="metadataConfidence">
+            <option value="">Select...</option>
+            <option value="5">5 — Very confident</option>
+            <option value="4">4 — Confident</option>
+            <option value="3">3 — Moderately confident</option>
+            <option value="2">2 — Somewhat uncertain</option>
+            <option value="1">1 — Uncertain</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section 6: Source screenshot -->
+      <div class="form-section-title">6. Source screenshot <span style="color:#c0392b">*</span></div>
+      <div class="helper-box">
+        Upload a screenshot of the definition <strong>as it appears in the original source</strong>. This is used for source verification and helps reviewers confirm the definition text and metadata are accurate. Screenshots from PDFs, websites, slides, or physical books are all acceptable.
+      </div>
+      <div class="form-group">
+        <label class="form-label">Screenshot of definition in source <span style="color:#c0392b">*</span></label>
+        <input class="form-input" id="sourceScreenshot" type="file" accept="image/*,.pdf"
+               style="padding:.45rem;" onchange="previewScreenshot(this)" />
+        <p class="form-hint">Accepted formats: JPG, PNG, GIF, WebP, PDF. Max 5 MB. The screenshot will be stored securely and only visible to project reviewers.</p>
+        <div id="screenshotPreview" style="margin-top:.5rem;"></div>
+        <div id="screenshotUploadStatus" style="font-size:.75rem;margin-top:.3rem;"></div>
+      </div>
+
+      <!-- Section 7: Checklist -->
+      <div class="form-section-title">7. Verification checklist</div>
+      <div style="background:#f4f4f0;border-radius:var(--radius);padding:.75rem 1rem;">
+        <label class="check-row"><input type="checkbox" id="confirmExactCopy" /> I copied the definition exactly as it appears in the source, except where I explicitly marked it as a translation.</label>
+        <label class="check-row"><input type="checkbox" id="confirmCitationsKept" /> I kept the in-text citations that appear inside the definition, if any.</label>
+        <label class="check-row"><input type="checkbox" id="confirmNoSynthesis" /> I confirm this is not my own synthesis, interpretation, or paraphrase.</label>
+        <label class="check-row"><input type="checkbox" id="confirmMetadata" /> I checked that the citation metadata are as accurate as possible.</label>
+        <label class="check-row"><input type="checkbox" id="confirmLocation" /> I provided a page, section, slide, entry, or other locator so another person can verify the definition.</label>
+        <label class="check-row"><input type="checkbox" id="confirmReview" /> I understand that the submission may be reviewed, source-verified, flagged, or archived by project contributors.</label>
+      </div>
+
+      <div id="contribMsg"></div>
+      <button class="btn-primary" id="btnSubmitContrib" onclick="submitContribution()">Submit definition for review</button>
+    </div>
+
+    <div id="contribModeAnnotate" style="display:none;">
+      <h2 id="annoTitle">Annotate this existing definition</h2>
+      <p class="modal-sub" id="annoSubtitle">Add missing context, provenance, tags, and verification notes. You do not need to repeat information that is already visible unless you want to correct or enrich it.</p>
+      <div class="annotation-language-note" id="annoLanguageNote">Please write your annotation in the same language as the definition where possible. You may use English if you are correcting metadata or adding a cross-language note.</div>
+      <input type="hidden" id="annoDefinitionId" />
+      <div class="form-section-title" id="annoPreviewTitle">Definition being annotated</div>
+      <div class="annotate-preview" id="annoDefinitionPreview"></div>
+
+      <div class="form-section-title" id="annoSection1">1. Source check and missing source metadata</div>
+      <div class="form-grid-2">
+        <div class="form-group"><label class="form-label" id="annoSourceCheckLabel">Source verification</label><select class="form-select" id="annoSourceCheck"><option value="" data-i18n-key="select">Select...</option><option value="definition_matches_source" data-i18n-key="sourceMatch">I checked — definition matches the cited source</option><option value="definition_partly_matches_source" data-i18n-key="sourcePartial">I checked — partly matches / needs attention</option><option value="definition_does_not_match_source" data-i18n-key="sourceNoMatch">I checked — does NOT match</option><option value="source_not_accessible" data-i18n-key="sourceNoAccess">I could not access the source</option><option value="not_checked" data-i18n-key="sourceNotChecked">I did not check the source</option></select></div>
+        <div class="form-group"><label class="form-label" id="annoSourceTermLabelLabel">Source term label / synonym, if different</label><input class="form-input" id="annoSourceTermLabel" type="text" placeholder="e.g. Scientific impact instead of Academic impact" data-i18n-placeholder="sourceTermPlaceholder" /></div>
+      </div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label" id="annoSourceTypeLabel">Source type</label><select class="form-select" id="annoSourceType"><option value="">Skip</option><option value="journal_article">Journal article</option><option value="book">Book</option><option value="book_chapter">Book chapter</option><option value="textbook">Textbook</option><option value="dictionary">Dictionary</option><option value="glossary">Glossary</option><option value="website">Website</option><option value="report">Report</option><option value="policy_document">Policy document</option><option value="slides">Lecture / workshop slides</option><option value="teaching_material">Teaching material</option><option value="other">Other</option></select></div>
+        <div class="form-group"><label class="form-label" id="annoLocatorTypeLabel">Locator type</label><select class="form-select" id="annoSourceLocationType"><option value="">Skip</option><option value="page">Page number(s)</option><option value="section">Section heading</option><option value="chapter">Chapter</option><option value="slide">Slide number</option><option value="entry">Dictionary / glossary entry</option><option value="other">Other locator</option></select></div>
+        <div class="form-group"><label class="form-label" id="annoExactLocatorLabel">Exact locator</label><input class="form-input" id="annoSourceLocation" type="text" placeholder="e.g. p. 35; Section 2.1; Slide 12" data-i18n-placeholder="locatorPlaceholder" /></div>
+      </div>
+      <div class="form-group"><label class="form-label" id="annoFullCitationLabel">Full citation or correction</label><textarea class="form-input" id="annoFullCitation" rows="2" placeholder="Provide missing or corrected citation details if needed." data-i18n-placeholder="citationPlaceholder" style="resize:vertical;"></textarea></div>
+
+      <div class="form-section-title" id="annoSection2">2. Definition provenance</div>
+      <div class="form-group"><label class="form-label" id="annoProvenanceLabel">How does the source present this definition?</label><select class="form-select" id="annoDefinitionProvenance"><option value="">Skip</option><option value="original_to_current_source">Original definition proposed by this source</option><option value="direct_quote_from_cited_source">Direct quotation from earlier source(s) cited by this source</option><option value="adapted_from_cited_source">Adapted/paraphrased from earlier source(s) cited by this source</option><option value="synthesises_multiple_cited_sources">Current source summarises multiple earlier cited sources</option><option value="provenance_unclear">Provenance unclear</option></select></div>
+      <p class="form-hint" id="annoProvenanceHint">Only list earlier sources if they are actually cited by the source you checked.</p>
+      <div id="annoOriginalSourcesContainer"></div>
+      <button type="button" id="annoAddEarlierSourceBtn" onclick="addAnnotationOriginalSource()" style="background:#fff;border:1.5px solid var(--green-dark);color:var(--green-dark);border-radius:var(--radius);padding:.45rem .8rem;font-size:.8rem;font-weight:600;margin-bottom:.75rem;">+ Add earlier cited source</button>
+
+      <div class="form-section-title" id="annoSection3">3. Conceptual annotation</div>
+      <div class="form-group"><label class="form-label" id="annoDisciplineLabel">Discipline(s)</label><div id="annoDisciplineTags" style="display:flex;flex-wrap:wrap;gap:.4rem;"><label class="tag-toggle"><input type="checkbox" value="psychology"> Psychology</label><label class="tag-toggle"><input type="checkbox" value="education"> Education</label><label class="tag-toggle"><input type="checkbox" value="medicine"> Medicine</label><label class="tag-toggle"><input type="checkbox" value="neuroscience"> Neuroscience</label><label class="tag-toggle"><input type="checkbox" value="linguistics"> Linguistics</label><label class="tag-toggle"><input type="checkbox" value="philosophy"> Philosophy</label><label class="tag-toggle"><input type="checkbox" value="statistics"> Statistics</label><label class="tag-toggle"><input type="checkbox" value="computer_science"> Computer science</label><label class="tag-toggle"><input type="checkbox" value="engineering"> Engineering</label><label class="tag-toggle"><input type="checkbox" value="library_information_science"> Library & information science</label><label class="tag-toggle"><input type="checkbox" value="social_science"> Social sciences</label><label class="tag-toggle"><input type="checkbox" value="interdisciplinary"> Interdisciplinary</label><label class="tag-toggle"><input type="checkbox" value="other"> Other</label></div><input class="form-input" id="annoDisciplineOther" type="text" placeholder="If Other, please specify" data-i18n-placeholder="otherSpecify" style="margin-top:.5rem;" /></div>
+      <div class="form-group"><label class="form-label" id="annoResearchContextLabel">Research context(s)</label><div id="annoResearchContextTags" style="display:flex;flex-wrap:wrap;gap:.4rem;"><label class="tag-toggle"><input type="checkbox" value="open_science"> Open science</label><label class="tag-toggle"><input type="checkbox" value="research_methods"> Research methods</label><label class="tag-toggle"><input type="checkbox" value="statistics"> Statistics</label><label class="tag-toggle"><input type="checkbox" value="measurement"> Measurement</label><label class="tag-toggle"><input type="checkbox" value="theory_development"> Theory development</label><label class="tag-toggle"><input type="checkbox" value="research_design"> Research design</label><label class="tag-toggle"><input type="checkbox" value="meta_research"> Meta-research</label><label class="tag-toggle"><input type="checkbox" value="education"> Education</label><label class="tag-toggle"><input type="checkbox" value="scientific_communication"> Scientific communication</label><label class="tag-toggle"><input type="checkbox" value="research_ethics"> Research ethics</label><label class="tag-toggle"><input type="checkbox" value="policy"> Policy</label><label class="tag-toggle"><input type="checkbox" value="other"> Other</label></div><input class="form-input" id="annoResearchContextOther" type="text" placeholder="If Other, please specify" data-i18n-placeholder="otherSpecify" style="margin-top:.5rem;" /></div>
+      <div class="form-grid-2"><div class="form-group"><label class="form-label" id="annoDefinitionStyleLabel">Definition style</label><select class="form-select" id="annoDefinitionStyle"><option value="">Skip</option><option value="theoretical">Theoretical</option><option value="operational">Operational</option><option value="normative">Normative / value-oriented</option><option value="descriptive">Descriptive</option><option value="procedural">Procedural / how-to</option><option value="educational">Educational / explanatory</option><option value="policy_oriented">Policy-oriented</option><option value="unclear">Unclear</option></select></div><div class="form-group"><label class="form-label" id="annoDefinitionScopeLabel">Definition scope</label><select class="form-select" id="annoDefinitionScope"><option value="">Skip</option><option value="very_broad">Very broad</option><option value="broad">Broad</option><option value="moderate">Moderate</option><option value="narrow">Narrow</option><option value="very_narrow">Very narrow</option></select></div></div>
+      <div class="form-group"><label class="form-label" id="annoTagsLabel">Tags</label><div id="annoTags" style="display:flex;flex-wrap:wrap;gap:.4rem;"><label class="tag-toggle"><input type="checkbox" value="discipline_specific"> Discipline-specific</label><label class="tag-toggle"><input type="checkbox" value="contested"> Contested</label><label class="tag-toggle"><input type="checkbox" value="emerging_concept"> Emerging concept</label><label class="tag-toggle"><input type="checkbox" value="historical"> Historical</label><label class="tag-toggle"><input type="checkbox" value="outdated"> Outdated</label><label class="tag-toggle"><input type="checkbox" value="ambiguous"> Ambiguous</label><label class="tag-toggle"><input type="checkbox" value="possible_jingle_fallacy_same_label_different_meaning"> Possible jingle fallacy: same label, different meaning</label><label class="tag-toggle"><input type="checkbox" value="possible_jangle_fallacy_different_label_similar_meaning"> Possible jangle fallacy: different label, similar meaning</label><label class="tag-toggle"><input type="checkbox" value="term_used_differently_from_other_definitions"> Term used differently from other definitions</label><label class="tag-toggle"><input type="checkbox" value="different_concept_under_same_term"> May refer to a different concept</label><label class="tag-toggle"><input type="checkbox" value="jargon_heavy"> Jargon-heavy</label><label class="tag-toggle"><input type="checkbox" value="accessible_to_non_experts"> Accessible to non-experts</label><label class="tag-toggle"><input type="checkbox" value="overly_broad"> Overly broad</label><label class="tag-toggle"><input type="checkbox" value="overly_narrow"> Overly narrow</label><label class="tag-toggle"><input type="checkbox" value="frequently_used"> Frequently used</label><label class="tag-toggle"><input type="checkbox" value="rarely_used"> Rarely used</label><label class="tag-toggle"><input type="checkbox" value="normative"> Normative</label><label class="tag-toggle"><input type="checkbox" value="value_laden"> Value-laden</label></div></div>
+      <div class="form-group"><label class="form-label" id="annoCommentLabel">Why might someone choose, avoid, or contextualise this definition?</label><textarea class="form-input" id="annoComment" rows="3" placeholder="e.g. Useful for teaching, but too narrow for interdisciplinary work." data-i18n-placeholder="commentPlaceholder" style="resize:vertical;"></textarea></div>
+      <div class="form-grid-2"><div class="form-group"><label class="form-label" id="annoConfidenceLabel">Annotation confidence</label><select class="form-select" id="annoConfidence"><option value="">Select...</option><option value="5">5 — Very confident</option><option value="4">4 — Confident</option><option value="3">3 — Moderately confident</option><option value="2">2 — Somewhat uncertain</option><option value="1">1 — Uncertain</option></select></div><div class="form-group"><label class="form-label" id="annoSuggestedStatusLabel">Suggested status</label><select class="form-select" id="annoSuggestedStatus"><option value="">No status suggestion</option><option value="source_verified">Source-verified: definition matches cited source</option><option value="flagged">Flagged for review</option><option value="archived">Archive / duplicate / superseded</option></select><div class="status-help" id="annoStatusHelp"><strong>Note:</strong> Source-verified only means that the wording and metadata appear to match the cited source. It does not mean this is a recommended, preferred, or conceptually superior definition.</div></div></div>
+      <div id="annoMsg"></div>
+      <button class="btn-primary" id="btnSubmitAnno" onclick="submitAnnotation()">Submit annotation</button>
+    </div>
+  </div>
+</div>
+
+<!-- Set password modal -->
+<div class="modal-backdrop" id="passwordSetBackdrop">
+  <div class="modal">
+    <h2>Set your password</h2>
+    <p class="modal-sub">Welcome to Re-SearchTerms! Please set a password to activate your account.</p>
+    <div class="form-group"><label class="form-label">New password <span style="color:#c0392b">*</span></label><input class="form-input" id="newPassword" type="password" placeholder="Min. 8 characters" /></div>
+    <div class="form-group"><label class="form-label">Confirm password <span style="color:#c0392b">*</span></label><input class="form-input" id="confirmPassword" type="password" placeholder="Repeat password" /></div>
+    <div style="background:#f4f4f0;border-radius:var(--radius);padding:.75rem 1rem;margin:.75rem 0;font-size:.75rem;color:var(--ink-mid);line-height:1.6;">
+      🔒 Your password is stored securely via <strong>Supabase Auth</strong> and encrypted with bcrypt before storage.
+      Project personnel <strong>cannot</strong> see or access your password.
+    </div>
+    <div id="passwordSetMsg"></div>
+    <button class="btn-primary" id="btnSetPassword" onclick="doSetPassword()">Activate account</button>
+  </div>
+</div>
+
+  <!-- Runtime environment config (generated at deploy time by GitHub Actions).
+       Must load BEFORE app.js so window.__ENV__ is available. -->
+  <script src="env-config.js"></script>
+
+  <!-- App JS -->
+  <script src="app.js"></script>
+</body>
+</html>
