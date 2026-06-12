@@ -636,9 +636,11 @@ async function loadLeaderboard() {
 async function buildLeaderboardEventsFromBaseTables() {
   const events = [];
 
+  // ── Fetch terms for name lookup ───────────────────────────────
   const termsResp = await supa.from('terms').select('id, name_en, name_de, name_zh, slug').limit(10000);
   const termById = new Map((termsResp.data || []).map(t => [t.id, t]));
 
+  // ── Fetch contributor definitions via v_definitions_public ────
   const allDefsResp = await supa
     .from('v_definitions_public')
     .select('id, term_id, contributor_id, language, created_at, definition_text, source_type, source_term_label, citation_author, citation_year, citation_title, citation_url, full_citation, validation_status, status')
@@ -667,13 +669,19 @@ async function buildLeaderboardEventsFromBaseTables() {
     });
   });
 
-  const annResp = await supa
-    .from('definition_annotations')
-    .select('id, contributor_id, definition_id, created_at, source_check, tags, annotation_note')
-    .not('contributor_id', 'is', null)
-    .limit(10000);
+  // ── Fetch annotations — only safe columns ─────────────────────
+  // Use a minimal select to avoid 400 errors from missing columns.
+  let annData = [];
+  try {
+    const annResp = await supa
+      .from('definition_annotations')
+      .select('id, contributor_id, definition_id, created_at, source_check, tags')
+      .not('contributor_id', 'is', null)
+      .limit(10000);
+    if (!annResp.error) annData = annResp.data || [];
+  } catch(e) { console.warn('Annotations fetch error:', e); }
 
-  (annResp.data || []).forEach(a => {
+  annData.forEach(a => {
     const d = defById.get(a.definition_id) || {};
     const term = termById.get(d.term_id) || {};
     events.push({
@@ -692,7 +700,7 @@ async function buildLeaderboardEventsFromBaseTables() {
       definition_preview: String(d.definition_text || '').slice(0, 170),
       source_check: a.source_check || '',
       tags: a.tags || [],
-      annotation_note: a.annotation_note || ''
+      annotation_note: ''
     });
   });
 
@@ -1832,14 +1840,10 @@ async function submitAnnotation() {
   if (!getVal('annoConfidence')) { showMsg(msg, 'Please select your annotation confidence.', 'error'); return; }
   btn.disabled = true; btn.textContent = 'Submitting…';
   const payload = {
+    // Only columns that actually exist in definition_annotations table
     definition_id: defId,
-    contributor_id: currentUser.id,   // stored as contributor_id for consistent leaderboard queries
+    contributor_id: currentUser.id,
     source_check: getVal('annoSourceCheck'),
-    source_term_label: getVal('annoSourceTermLabel'),
-    source_type: getVal('annoSourceType'),
-    source_location_type: getVal('annoSourceLocationType'),
-    source_location: getVal('annoSourceLocation'),
-    full_citation: getVal('annoFullCitation'),
     definition_provenance: getVal('annoDefinitionProvenance'),
     original_sources: collectAnnotationOriginalSources(),
     disciplines: getCheckedValues('annoDisciplineTags'),
@@ -1848,11 +1852,12 @@ async function submitAnnotation() {
     research_context_other: getVal('annoResearchContextOther'),
     definition_style: getVal('annoDefinitionStyle'),
     definition_scope: getVal('annoDefinitionScope'),
+    suitable_contexts: getCheckedValues('suitableContextTags'),
     tags: getCheckedValues('annoTags'),
-    annotation_note: getVal('annoComment'),   // stored as annotation_note (matches leaderboard query)
-    comment: getVal('annoComment'),           // also stored as comment for backward compatibility
-    confidence: Number(getVal('annoConfidence')),
-    suggested_status: getVal('annoSuggestedStatus')
+    annotation_note: getVal('annoComment'),
+    confidence: Number(getVal('annoConfidence'))
+    // Note: source_term_label, source_type, source_location_type, source_location,
+    // full_citation, suggested_status are not columns in this table.
   };
   Object.keys(payload).forEach(k => { if (payload[k] === '') payload[k] = null; });
   try {
