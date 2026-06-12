@@ -1,4 +1,4 @@
-name: Deploy static Re-SearchTerms app
+name: Deploy Re-SearchTerms Shiny Wrapper
 
 on:
   push:
