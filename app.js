@@ -642,6 +642,7 @@ async function buildLeaderboardEventsFromBaseTables() {
   const allDefsResp = await supa
     .from('v_definitions_public')
     .select('id, term_id, contributor_id, language, created_at, definition_text, source_type, source_term_label, citation_author, citation_year, citation_title, citation_url, full_citation, validation_status, status')
+    .not('contributor_id', 'is', null)
     .limit(10000);
 
   const defById = new Map((allDefsResp.data || []).map(d => [d.id, d]));
@@ -2411,7 +2412,7 @@ function showDefinitionNodeDetails(nodeId) {
       Canonical term: ${escapeHtml(row.concept || row.__term?.name_en || '')}<br>
       Source term: ${escapeHtml(row.source_term_label || row.term || '')}<br>
       Citation: ${escapeHtml(row.full_citation || [row.citation_author, row.citation_year, row.citation_title].filter(Boolean).join(' — ') || 'Not available')}<br>
-      Contributor: ${escapeHtml(row.contributor_display_name || row.contributor_name || '')} <span id="contrib-name-placeholder" style="color:var(--ink-lt);font-size:.75rem;"></span><br>
+      Contributor: <span id="contrib-name-placeholder" style="color:var(--ink-lt);">Loading…</span><br>
       Source checks: ${sourceCheck} match / ${mismatch} mismatch / ${noAccess} inaccessible<br>
       Annotation records: ${annotations.length}
     </div>
