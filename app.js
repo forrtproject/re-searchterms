@@ -590,10 +590,12 @@ async function handleSmartDeepLink() {
   const params = new URLSearchParams(query || '');
   const term = params.get('term');
   const mode = params.get('mode') || 'cooccurrence';
+  // Ensure terms are loaded before navigating
+  if (!allTerms.length) await loadTerms();
   if (page === 'definitions' && term) return goToDefinitionTerm(term);
   if (page === 'words' && term) return goToWordTerm(term);
   if (page === 'terms' && term) return goToTermAnalysis(term, mode);
-  if (document.getElementById(`page-${page}`)) showPage(page);
+  if (document.getElementById('page-' + page)) showPage(page);
 }
 
 // ── Community Dashboard / Leaderboard ─────────────────────────
@@ -684,6 +686,8 @@ async function buildLeaderboardEventsFromBaseTables() {
   annData.forEach(a => {
     const d = defById.get(a.definition_id) || {};
     const term = termById.get(d.term_id) || {};
+    // Also search allTerms (loaded for browse page) as fallback for seed definitions
+    const fallbackTerm = (window.allTerms || allTerms || []).find(t => t.id === d.term_id);
     events.push({
       type: 'annotation',
       contributor_id: a.contributor_id,
@@ -692,7 +696,7 @@ async function buildLeaderboardEventsFromBaseTables() {
       definition_id: a.definition_id,
       annotation_id: a.id,
       term_id: d.term_id,
-      term_name: term.name_en || d.source_term_label || '(term unavailable)',
+      term_name: term.name_en || fallbackTerm?.name_en || d.source_term_label || '(term unavailable)',
       term_name_de: term.name_de || '',
       term_name_zh: term.name_zh || '',
       source_type: d.source_type,
@@ -2421,6 +2425,14 @@ function showDefinitionNodeDetails(nodeId) {
       Source checks: ${sourceCheck} match / ${mismatch} mismatch / ${noAccess} inaccessible<br>
       Annotation records: ${annotations.length}
     </div>
+    ${annotations.length > 0 ? `<div class="definition-edge-box" style="margin-top:.5rem;">
+      <strong>Community annotations (${annotations.length})</strong>
+      ${annotations.map(a => `<div style="margin-top:.5rem;padding:.5rem;background:#f8faf7;border-radius:6px;font-size:.78rem;">
+        <span style="font-weight:600;color:var(--green-dark);">${escapeHtml(a.source_check || 'no source check')}</span>
+        ${a.annotation_note ? `<div style="margin-top:.25rem;color:var(--ink-mid);">${escapeHtml(a.annotation_note)}</div>` : ''}
+        <div style="color:var(--ink-lt);margin-top:.2rem;">${escapeHtml(a.created_at ? new Date(a.created_at).toISOString().slice(0,10) : '')}</div>
+      </div>`).join('')}
+    </div>` : ''}
     ${link ? `<p style="margin-top:.75rem;"><a href="${escapeHtml(link)}" target="_blank" rel="noopener" style="text-decoration:underline;color:var(--green-mid);">Open source ↗</a></p>` : ''}
     <div class="definition-action-row">
       ${canAnnotate ? `<button class="definition-mini-btn" onclick="openAnnotate(event, '${escapeHtml(liveId)}')">Annotate / source-check</button>` : `<button class="definition-mini-btn secondary" disabled title="This legacy node has no Supabase UUID yet.">Legacy node: annotation needs Supabase mapping</button>`}
