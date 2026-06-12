@@ -120,6 +120,38 @@ try {
   }
 } catch(e) { console.error('[Re-SearchTerms] Supabase init error:', e); }
 
+// Global profile cache — populated on first use, shared across all views
+const _profileCache = new Map();
+async function getProfileById(userId) {
+  if (!userId || !supa) return null;
+  if (_profileCache.has(userId)) return _profileCache.get(userId);
+  try {
+    const { data, error } = await supa
+      .from('v_contributor_profiles')
+      .select('id, display_name, full_name, orcid, affiliation')
+      .eq('id', userId)
+      .single();
+    if (!error && data) {
+      _profileCache.set(userId, data);
+      return data;
+    }
+  } catch(e) {}
+  // fallback to profiles table
+  try {
+    const { data, error } = await supa
+      .from('profiles')
+      .select('id, display_name, full_name, orcid, affiliation')
+      .eq('id', userId)
+      .single();
+    if (!error && data) {
+      _profileCache.set(userId, data);
+      return data;
+    }
+  } catch(e) {}
+  _profileCache.set(userId, null);
+  return null;
+}
+
 let allTerms = [], currentUser = null, pendingContributeTerm = null;
 let latestPanelDefinitions = [];
 
@@ -2379,7 +2411,7 @@ function showDefinitionNodeDetails(nodeId) {
       Canonical term: ${escapeHtml(row.concept || row.__term?.name_en || '')}<br>
       Source term: ${escapeHtml(row.source_term_label || row.term || '')}<br>
       Citation: ${escapeHtml(row.full_citation || [row.citation_author, row.citation_year, row.citation_title].filter(Boolean).join(' — ') || 'Not available')}<br>
-      Contributor: ${contributorHtml(row)}<br>
+      Contributor: ${escapeHtml(row.contributor_display_name || row.contributor_name || '')} <span id="contrib-name-placeholder" style="color:var(--ink-lt);font-size:.75rem;"></span><br>
       Source checks: ${sourceCheck} match / ${mismatch} mismatch / ${noAccess} inaccessible<br>
       Annotation records: ${annotations.length}
     </div>
@@ -2387,6 +2419,19 @@ function showDefinitionNodeDetails(nodeId) {
     <div class="definition-action-row">
       ${canAnnotate ? `<button class="definition-mini-btn" onclick="openAnnotate(event, '${escapeHtml(liveId)}')">Annotate / source-check</button>` : `<button class="definition-mini-btn secondary" disabled title="This legacy node has no Supabase UUID yet.">Legacy node: annotation needs Supabase mapping</button>`}
     </div>`;
+  // Async-fill contributor name after render
+  if (row.contributor_id) {
+    const ph = document.getElementById('contrib-name-placeholder');
+    const cached = row.contributor_display_name || row.contributor_name || '';
+    if (cached && ph) { ph.textContent = cached; ph.style.color = 'var(--ink)'; }
+    getProfileById(row.contributor_id).then(p => {
+      const el = document.getElementById('contrib-name-placeholder');
+      if (!el) return;
+      const name = p?.display_name || p?.full_name || cached || row.contributor_id;
+      el.textContent = name;
+      el.style.color = 'var(--ink)';
+    });
+  }
 }
 
 function defSourceDetailHtml(row) {
