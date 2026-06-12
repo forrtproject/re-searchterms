@@ -2135,7 +2135,7 @@ async function enrichDefinitionsWithContributorProfiles(defs) {
     if (!r.error && Array.isArray(r.data)) profiles = profiles.concat(r.data);
   } catch(e) {}
   try {
-    const r = await supa.from('v_contributor_profiles').select('id, user_id, display_name, full_name, orcid').in('user_id', ids);
+    const r = await supa.from('v_contributor_profiles').select('id, display_name, full_name, orcid').in('id', ids);
     if (!r.error && Array.isArray(r.data)) profiles = profiles.concat(r.data);
   } catch(e) {}
   const byId = new Map();
